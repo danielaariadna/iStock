@@ -3,6 +3,7 @@ import msjIcon from "./buttons/iconMsj.png"
 
 export default function ImageContainer({image,id}) {
   return (
+        <a href={"image"+id} style={{"text-decoration": "none"}}>
         <div style={{"border": "1px solid","color":"#A8B2B1"}}>
             <div style={{"height": "180px","width": "240px","background-color":"#E8EDED"}}>
                 <img src={image} style={{"width":" 90%","height":" 90%","object-fit":" contain","margin-top":"6px"}}/>
@@ -19,5 +20,6 @@ export default function ImageContainer({image,id}) {
                 
             </div>
         </div>
+        </a>
   );
 }
