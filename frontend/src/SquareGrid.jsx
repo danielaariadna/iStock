@@ -1,14 +1,21 @@
-import React from 'react'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import ImageContainer from './imageContainer';
 
-export default function SquareGrid({imageList}) {
+export default function SquareGrid({ imageList }) {
+  const navigate = useNavigate();
+
+  const handleClick = (index) => {
+    navigate(`/editor/${index}`);
+  };
+
   return (
-      
-        <div style={{"display":"flex","flex-wrap": "wrap","gap":"10px"}}>
-          {imageList.map(function (image){
-            return <ImageContainer image={image} id={Math.floor(500+Math.random() * 9000)}/>
-          })
-          }
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', padding: '20px' }}>
+      {imageList.map((image, index) => (
+        <div key={index} onClick={() => handleClick(index)} style={{ cursor: 'pointer' }}>
+          <ImageContainer image={image} />
         </div>
+      ))}
+    </div>
   );
 }
