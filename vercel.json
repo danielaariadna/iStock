@@ -1,0 +1,10 @@
+{
+    "projects": {
+      "name": "iStock"
+    },
+    "builds": [],
+    "rewrites": [],
+    "routes": [],
+    "functions": {},
+    "source": "frontend"
+  }
