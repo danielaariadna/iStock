@@ -10,9 +10,21 @@ export default function SquareGrid({ imageList }) {
   };
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', padding: '20px' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '30px',
+        padding: '20px',
+        justifyContent: 'center',
+      }}
+    >
       {imageList.map((image, index) => (
-        <div key={index} onClick={() => handleClick(index)} style={{ cursor: 'pointer' }}>
+        <div
+          key={index}
+          onClick={() => handleClick(index)}
+          style={{ cursor: 'pointer' }}
+        >
           <ImageContainer image={image} />
         </div>
       ))}
