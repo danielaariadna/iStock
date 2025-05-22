@@ -1,27 +1,47 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from "react";
+import { createClient } from '@supabase/supabase-js'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import foto1 from './photos/1.jpg';
-import foto2 from './photos/2.jpg';
-import foto3 from './photos/3.jpg';
-import foto4 from './photos/4.jpg';
-import foto5 from './photos/5.jpg';
-import foto6 from './photos/6.jpg';
-import foto7 from './photos/7.jpg';
 
 import './App.css';
 import SquareGrid from './SquareGrid';
 import ButtonAppBar from './NavBar';
 import Footer from './Footer';
-import ImageEditor from './EditorPage';
+import ImageEditor from "./EditorPage"; // Importá tu editor
+
+async function getResources(supabase){
+    const { data, error } = await supabase
+  .from('recursos')
+  .select()
+  return data;
+  
+}
 
 function App() {
-  const fotos = [foto1, foto2, foto3, foto4, foto5, foto6, foto7];
+  const supabaseUrl = 'https://iennmlivjcdgfdccxinc.supabase.co'
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllbm5tbGl2amNkZ2ZkY2N4aW5jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc3ODc2NjQsImV4cCI6MjA2MzM2MzY2NH0.Y-7YQeSAk0-pDj9kOoaJkHDBvzeh7KDPSFzySTMOp10"
+  const supabase = createClient(supabaseUrl, supabaseKey)
 
-  const [imageList] = useState(
-    () => Array.from({ length: 100 }, () => fotos[Math.floor(Math.random() * fotos.length)])
-  );
+  // Generar lista de fotos a mostrar
+  var imageList = []
 
+  const [instruments, setInstruments] = useState([]);
+  useEffect(() => {
+    getInstruments();
+  }, []);
+  async function getInstruments() {
+    const { data } = await supabase.from("recursos").select();
+    setInstruments(data);
+  }
+  
+  instruments.forEach(function(element){
+    imageList.push(element.ruta_archivo);
+  })
+  
+
+  console.log("imagelist: ",imageList);
+  
+  
   return (
     <Router>
       <div className="App">
@@ -38,7 +58,7 @@ function App() {
       </div>
     </Router>
   );
+ 
 }
 
 export default App;
-

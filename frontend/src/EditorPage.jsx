@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import foto1 from './photos/8.jpg';
 import IconRecortar from './photos/recortar.png';
 import IconAñadirTexto from './photos/texto.png';
 import IconEliminarFondo from './photos/tijera.png';
