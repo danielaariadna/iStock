@@ -76,32 +76,42 @@ function App() {
       <div className="App">
         <ButtonAppBar />
 
-        <div style={{ padding: '15px', backgroundColor: '#fff', display: 'flex', alignItems: 'center', gap: '10px', maxWidth: '2000px' }}>
-          <select
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            style={{ padding: '15px', fontSize: '16px' }}
-          >
-            <option value="Todas">Todas</option>
-            <option value="1">Aire Libre</option>
-            <option value="2">Paisaje</option>
-            <option value="3">Argentina</option>
-            {/* Agrega más opciones de categorías si las hay */}
-          </select>
-
-          <input
-            type="search"
-            placeholder="Buscar por palabra clave (ej: agua, verde...)"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyDown={handleKeyDown}
-            style={{ flexGrow: 1, padding: '15px', fontSize: '16px' }}
-          />
-        </div>
+        
+        
 
         <header className="App-header">
           <Routes>
-            <Route path="/" element={<SquareGrid imageList={filteredResources} />} />
+            <Route path="/" element={
+              <div style={{"display":"flex","flexDirection": 'column',"flex-grow":"1","width":"100%"}}>
+                {/*Barra de Busqueda*/}
+                <div style={{ padding: '15px', backgroundColor: '#fff', display: 'flex', alignItems: 'center', gap: '10px', maxWidth: '2000px' }}>
+                  <select
+                    value={filter}
+                    onChange={(e) => setFilter(e.target.value)}
+                    style={{ padding: '15px', fontSize: '16px' }}
+                  >
+                    <option value="Todas">Todas</option>
+                    <option value="1">Aire Libre</option>
+                    <option value="2">Paisaje</option>
+                    <option value="3">Argentina</option>
+                    {/* Agrega más opciones de categorías si las hay */}
+                  </select>
+
+                  <input
+                    type="search"
+                    placeholder="Buscar por palabra clave (ej: agua, verde...)"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    style={{ flexGrow: 1, padding: '15px', fontSize: '16px' }}
+                  />
+                </div>
+
+                {/*Grilla de Imagenes*/}
+                <SquareGrid imageList={filteredResources} />
+              </div>
+          
+          } />
             <Route path="/editor/:id" element={<ImageEditor imageList={filteredResources.map(r => r)} />} />
           </Routes>
         </header>

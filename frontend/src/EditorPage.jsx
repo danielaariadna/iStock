@@ -229,7 +229,7 @@ export default function ImageEditor({ imageList }) {
     }}
   >
     <p style={{ fontWeight: 'bold', fontSize: '18px', margin: 0 }}>
-      AR$5.800 por esta imagen
+      AR${imageObj.precio} por esta imagen
     </p>
   </div>
 
