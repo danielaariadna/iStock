@@ -32,11 +32,22 @@ export default function ImageEditor({ imageList }) {
   const [selectedOption, setSelectedOption] = useState('gratis');
 
   const imageId = parseInt(id, 10);
-  const imageObj = imageList[imageId];
+
+  // Buscar imagen dentro de imageList que coincida con la id del parametro
+  var newImageObj;
+  for(let i = 0; i < imageList.length; i++){
+    if(imageList[i].id === imageId){
+      newImageObj = imageList[i];
+      break;
+    }
+  }
+
+  const imageObj = newImageObj;//imageList[imageId];
   
   console.log("ID:", id);
   console.log("imageId:", imageId);
   console.log("imageList.length:", imageList.length);
+  console.log("imageList: ",imageList);
   console.log("imageObj:", imageObj);
   if (!imageObj) {
     return <div>Imagen no encontrada</div>;
@@ -139,7 +150,7 @@ export default function ImageEditor({ imageList }) {
   }}
 >
   <img
-    src={imageObj}
+    src={imageObj.ruta_archivo}
     alt={`Imagen ${imageId}`}
     style={{
         width: '900x', 

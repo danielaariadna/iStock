@@ -101,8 +101,8 @@ function App() {
 
         <header className="App-header">
           <Routes>
-            <Route path="/" element={<SquareGrid imageList={filteredResources.map(r => r.ruta_archivo)} />} />
-            <Route path="/editor/:id" element={<ImageEditor imageList={filteredResources.map(r => r.ruta_archivo)} />} />
+            <Route path="/" element={<SquareGrid imageList={filteredResources} />} />
+            <Route path="/editor/:id" element={<ImageEditor imageList={filteredResources.map(r => r)} />} />
           </Routes>
         </header>
 

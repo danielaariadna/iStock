@@ -6,7 +6,7 @@ export default function SquareGrid({ imageList }) {
   const navigate = useNavigate();
 
   const handleClick = (index) => {
-    navigate(`/editor/${index}`);
+    //navigate(`/editor/${index}`);
   };
 
   return (
