@@ -94,7 +94,12 @@ function App() {
                     <option value="1">Aire Libre</option>
                     <option value="2">Paisaje</option>
                     <option value="3">Argentina</option>
-                    {/* Agrega más opciones de categorías si las hay */}
+                    <option value="4">Comida</option>
+                    <option value="5">Animales</option>
+                    <option value="6">Flores</option>
+                    <option value="7">Música</option>
+                    <option value="8">Deportes</option>
+                  
                   </select>
 
                   <input
