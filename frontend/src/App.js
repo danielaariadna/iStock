@@ -17,6 +17,7 @@ function App() {
   // Estado para recursos (con categorías)
   const [resources, setResources] = useState([]);
 
+
   // Estado para filtro de categoría (string con código) y búsqueda
   const [filter, setFilter] = useState('Todas');
   const [inputValue, setInputValue] = useState('');
@@ -98,7 +99,7 @@ function App() {
                 </>
 
                 {/*Grilla de Imagenes*/}
-                <SquareGrid imageList={filteredResources} />
+                <SquareGrid imageList={filteredResources}/>
               </div>
           
           } />
@@ -113,43 +114,5 @@ function App() {
     </Router>
   );
 }
-
-    function SearchBar({filter, e, setFilter, inputValue, setInputValue, handleKeyDown}) {
-      return (<>
-                {
-    /*Barra de Busqueda*/
-  }
-                <div style={{
-    padding: '15px',
-    backgroundColor: '#fff',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '10px',
-    maxWidth: '2000px'
-  }}>
-                  <select value={filter} onChange={e => setFilter(e.target.value)} style={{
-      padding: '15px',
-      fontSize: '16px'
-    }}>
-                    <option value="Todas">Todas</option>
-                    <option value="1">Aire Libre</option>
-                    <option value="2">Paisaje</option>
-                    <option value="3">Argentina</option>
-                    <option value="4">Comida</option>
-                    <option value="5">Animales</option>
-                    <option value="6">Flores</option>
-                    <option value="7">Música</option>
-                    <option value="8">Deportes</option>
-                  
-                  </select>
-
-                  <input type="search" placeholder="Buscar por palabra clave (ej: agua, verde...)" value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyDown={handleKeyDown} style={{
-      flexGrow: 1,
-      padding: '15px',
-      fontSize: '16px'
-    }} />
-                </div>
-                </>);
-    }
   
 export default App;

@@ -32,6 +32,21 @@ export const fetchUsuarios = async (setState) => {
     }
 };
 
+// Recupera un usuario por id
+export const fetchUsuarioByID = async (setState,userID) => {
+    const { data, error } = await supabase
+        .from('usuarios')
+        .select().eq('id',userID)
+    if (error) {
+      console.error("Error fetching users: ", error);
+    } else {
+      setState(data[0].nombre);
+      console.log("query return: ",data);
+      console.log("id usuario a buscar: ",userID);
+      console.log("nombre usuario: ",data[0].nombre);
+    }
+};
+
 // Inserta un Usuario a la base de datos
 
 

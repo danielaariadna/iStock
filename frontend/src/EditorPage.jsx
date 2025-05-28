@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import IconRecortar from './photos/recortar.png';
 import IconAñadirTexto from './photos/texto.png';
@@ -9,6 +9,8 @@ import IconReemplazar from './photos/pinceles.png';
 import IconGuardar from './photos/guardar.png';
 import IconProbar from './photos/descargar.png';
 import ImageInfo from './ImageInfo';
+
+import { fetchUsuarioByID } from './supabase-consultas';
 
 const itemStyle = {
   backgroundColor: 'white',
@@ -32,7 +34,14 @@ export default function ImageEditor({ imageList }) {
   const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState('gratis');
 
+  // Estado para el autor actual del recurso
+  const [autor,setAutor] = useState('');
+
+
+
   const imageId = parseInt(id, 10);
+
+
 
   // Buscar imagen dentro de imageList que coincida con la id del parametro
   var newImageObj;
@@ -44,6 +53,11 @@ export default function ImageEditor({ imageList }) {
   }
   const imageObj = newImageObj;//imageList[imageId];
   
+  // Obtener recursos con sus categorías al montar el componente
+  useEffect(() => {
+    fetchUsuarioByID(setAutor,imageObj.autor_usuario_id);
+  }, []);
+
   console.log("ID:", id);
   console.log("imageId:", imageId);
   console.log("imageList.length:", imageList.length);
@@ -52,6 +66,9 @@ export default function ImageEditor({ imageList }) {
   if (!imageObj) {
     return <div>Imagen no encontrada</div>;
   }
+
+
+
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', fontFamily: 'Arial, sans-serif' }}>
@@ -181,7 +198,7 @@ export default function ImageEditor({ imageList }) {
     style={{ width: '120px', height: 'auto' }} 
   />
     <br />
-    Credit: {imageObj.autor_usuario_id}
+    Credit: {autor}
   </div>
   
 </div>
@@ -313,7 +330,7 @@ export default function ImageEditor({ imageList }) {
             Ver planes y precio
           </button>
           {/*Información del archivo*/}
-          <ImageInfo image={imageObj}></ImageInfo>
+          <ImageInfo image={imageObj} autorName={autor}></ImageInfo>
 </aside>
         
       </div>
