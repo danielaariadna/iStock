@@ -20,6 +20,23 @@ export const fetchResources = async (setState) => {
     }
 };
 
+// Recupera un recurso usando su id
+export const fetchResourceByID = async (setState,resourceID) => {
+    const { data, error } = await supabase
+        .from('recursos')
+        .select(`
+          *,
+          recurso_pertenecea_categoria (
+            categoria_codigo
+          )
+        `).eq("id",resourceID);
+    if (error) {
+      console.error("Error fetching by ID: ", error);
+    } else {
+      setState(data[0]);
+    }
+};
+
 // Recupera todos los Usuarios
 export const fetchUsuarios = async (setState) => {
     const { data, error } = await supabase
@@ -32,7 +49,7 @@ export const fetchUsuarios = async (setState) => {
     }
 };
 
-// Recupera un usuario por id
+// Recupera el nombre de un usuario usando su id
 export const fetchUsuarioByID = async (setState,userID) => {
     const { data, error } = await supabase
         .from('usuarios')
@@ -44,6 +61,25 @@ export const fetchUsuarioByID = async (setState,userID) => {
       console.log("query return: ",data);
       console.log("id usuario a buscar: ",userID);
       console.log("nombre usuario: ",data[0].nombre);
+    }
+};
+
+// Recuperar los nombres de las categorias de un recurso (HACIENDOSE)
+export const fetchCategoriasByResourceID = async (setState,resourceID) => {
+    const { data, error } = await supabase
+        .from('recurso_pertenecea_categoria')
+        .select('categorias_recursos(nombre)').eq("recurso_id",resourceID);
+    if (error) {
+      console.error("Error fetching categorias: ", error);
+    } else {
+      console.log("Categorias del recurso ",resourceID," es: ",data);
+      // Construir string de categoria
+      var categoriasString = "";
+      data.forEach(function(e){
+        categoriasString += e.categorias_recursos.nombre + ' | ';
+      });
+      console.log(categoriasString);
+      setState(categoriasString);
     }
 };
 

@@ -10,7 +10,7 @@ import IconGuardar from './photos/guardar.png';
 import IconProbar from './photos/descargar.png';
 import ImageInfo from './ImageInfo';
 
-import { fetchUsuarioByID } from './supabase-consultas';
+import { fetchResourceByID, fetchUsuarioByID, fetchCategoriasByResourceID } from './supabase-consultas';
 
 const itemStyle = {
   backgroundColor: 'white',
@@ -37,11 +37,10 @@ export default function ImageEditor({ imageList }) {
   // Estado para el autor actual del recurso
   const [autor,setAutor] = useState('');
 
-
+  // Estado para las categorias del recurso actual
+  const [categoria,setCategoria] = useState('');
 
   const imageId = parseInt(id, 10);
-
-
 
   // Buscar imagen dentro de imageList que coincida con la id del parametro
   var newImageObj;
@@ -52,17 +51,27 @@ export default function ImageEditor({ imageList }) {
     }
   }
   const imageObj = newImageObj;//imageList[imageId];
-  
-  // Obtener recursos con sus categorías al montar el componente
+
+  // Obtener el nombre del usuario del recurso actual
   useEffect(() => {
+    if (!imageObj) return;
     fetchUsuarioByID(setAutor,imageObj.autor_usuario_id);
-  }, []);
+  }, [imageObj]); // Se usa como dependencia que el objeto imageObj se haya encontrado
+
+  // Obtener el nombre de las categorias del recurso actual (separadas por ' | ')
+  useEffect(() => {
+    if (!imageObj) return;
+    fetchCategoriasByResourceID(setCategoria,imageObj.id);
+  }, [imageObj]); // Se usa como dependencia que el objeto imageObj se haya encontrado
+
+  
 
   console.log("ID:", id);
   console.log("imageId:", imageId);
   console.log("imageList.length:", imageList.length);
   console.log("imageList: ",imageList);
   console.log("imageObj:", imageObj);
+  console.log("nombre autor: ",autor);
   if (!imageObj) {
     return <div>Imagen no encontrada</div>;
   }
@@ -330,7 +339,7 @@ export default function ImageEditor({ imageList }) {
             Ver planes y precio
           </button>
           {/*Información del archivo*/}
-          <ImageInfo image={imageObj} autorName={autor}></ImageInfo>
+          <ImageInfo image={imageObj} autorName={autor} categories={categoria}></ImageInfo>
 </aside>
         
       </div>

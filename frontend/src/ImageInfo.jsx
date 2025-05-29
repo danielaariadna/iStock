@@ -1,4 +1,4 @@
-export default function ImageInfo({ image,autorName }) {
+export default function ImageInfo({ image,autorName,categories }) {
   return (
     <div style={{"font-size":"18px",textAlign: 'left'}}>
         Credit: {autorName} <br/>
@@ -6,7 +6,7 @@ export default function ImageInfo({ image,autorName }) {
         Stock photo ID: {image.id} <br/>
         Upload date: {image.fecha_subida} <br/>
         Location: {image.ubicación} <br/>
-        Categories:
+        Categories: {categories}
     </div>
   );
 }
