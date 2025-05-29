@@ -11,7 +11,7 @@ import ImageEditor from "./EditorPage";
 
 import supabase from "./supabase-client"; // Permite un singleton con la conexión a la base de datos
 
-import {fetchResources, updateUsuarioCompleto} from "./supabase-consultas";
+import {fetchResources, insertUsuarioBasico, updateUsuarioCompleto} from "./supabase-consultas";
 
 function App() {
   // Estado para recursos (con categorías)
@@ -48,7 +48,9 @@ function App() {
     return true;
   });
 
-  updateUsuarioCompleto("aiejde@gmail.com","apepe","geerillo","nergtflix","chile");
+  updateUsuarioCompleto("aiejde@gmail.com","ioa","aowidow","netflix");
+  //insertUsuarioBasico("jeremiasjulian5003@gmail.com",1234,"argentina",false);
+  updateUsuarioCompleto("jeremiasjulian5003@gmail.com","Jere","Julian","google 2");
 
   // Manejo de la búsqueda con Enter
   const handleKeyDown = (event) => {
