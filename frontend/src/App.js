@@ -48,9 +48,9 @@ function App() {
     return true;
   });
 
-  updateUsuarioCompleto("aiejde@gmail.com","ioa","aowidow","netflix");
+  //updateUsuarioCompleto("aiejde@gmail.com","ioa","aowidow","netflix");
   //insertUsuarioBasico("jeremiasjulian5003@gmail.com",1234,"argentina",false);
-  updateUsuarioCompleto("jeremiasjulian5003@gmail.com","Jere","Julian","google 2");
+  //updateUsuarioCompleto("jeremiasjulian5003@gmail.com","Jere","Julian","google 2");
 
   // Manejo de la búsqueda con Enter
   const handleKeyDown = (event) => {
