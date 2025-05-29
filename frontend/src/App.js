@@ -11,7 +11,7 @@ import ImageEditor from "./EditorPage";
 
 import supabase from "./supabase-client"; // Permite un singleton con la conexión a la base de datos
 
-import {fetchResources} from "./supabase-consultas";
+import {fetchResources, updateUsuarioCompleto} from "./supabase-consultas";
 
 function App() {
   // Estado para recursos (con categorías)
@@ -47,6 +47,8 @@ function App() {
 
     return true;
   });
+
+  updateUsuarioCompleto("aiejde@gmail.com","apepe","geerillo","nergtflix","chile");
 
   // Manejo de la búsqueda con Enter
   const handleKeyDown = (event) => {

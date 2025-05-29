@@ -84,8 +84,12 @@ export const fetchCategoriasByResourceID = async (setState,resourceID) => {
 };
 
 // Inserta un Usuario a la base de datos
-export const insertUsuarioBasico = async (userData) => {
-    const userDataObj = {}
+export const insertUsuarioBasico = async (_email,_contraseña,_enableNotif) => {
+    const userDataObj = {
+      email: _email,
+      contraseña: _contraseña,
+      recibir_notificaciones: _enableNotif
+    }
 
     console.log("Objeto de usuario listo para insertar: ",userDataObj);
     const { data, error } = await supabase
@@ -95,6 +99,26 @@ export const insertUsuarioBasico = async (userData) => {
       console.error("Error inserting usuarios: ", error);
     } else {
       console.log("Insercion de ",userDataObj, " exitosa");
+    }
+};
+
+// Inserta un Usuario a la base de datos
+export const updateUsuarioCompleto = async (_email,_firstName,_lastName,_username,_pais) => {
+    const userDataObj = {
+      first_name : _firstName,
+      last_name : _lastName,
+      nombre : _username,
+      pais : _pais
+    }
+
+    console.log("Objeto de usuario listo para insertar: ",userDataObj);
+    const { data, error } = await supabase
+        .from('usuarios')
+        .update(userDataObj).eq("email",_email);
+    if (error) {
+      console.error("Error updating usuarios: ", error);
+    } else {
+      console.log("Modificacion de ",userDataObj, " exitosa");
     }
 };
 
