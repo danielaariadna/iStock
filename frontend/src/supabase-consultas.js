@@ -53,7 +53,7 @@ export const fetchUsuarios = async (setState) => {
 export const fetchUsuarioByID = async (setState,userID) => {
     const { data, error } = await supabase
         .from('usuarios')
-        .select().eq('id',userID)
+        .select().eq('email',userID)
     if (error) {
       console.error("Error fetching users: ", error);
     } else {
@@ -84,7 +84,19 @@ export const fetchCategoriasByResourceID = async (setState,resourceID) => {
 };
 
 // Inserta un Usuario a la base de datos
+export const insertUsuarioBasico = async (userData) => {
+    const userDataObj = {}
 
+    console.log("Objeto de usuario listo para insertar: ",userDataObj);
+    const { data, error } = await supabase
+        .from('usuarios')
+        .insert(userDataObj).single();
+    if (error) {
+      console.error("Error inserting usuarios: ", error);
+    } else {
+      console.log("Insercion de ",userDataObj, " exitosa");
+    }
+};
 
 // Actualiza los datos de un Usuario (HACIENDOSE)
 export const updateUsuario = async (setState,userId) => {
