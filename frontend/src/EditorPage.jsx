@@ -10,7 +10,7 @@ import IconGuardar from './photos/guardar.png';
 import IconProbar from './photos/descargar.png';
 import ImageInfo from './ImageInfo';
 
-import { fetchResourceByID, fetchUsuarioByID, fetchCategoriasByResourceID } from './supabase-consultas';
+import { fetchResourceByID, fetchNombreUsuarioByID, fetchCategoriasByResourceID } from './supabase-consultas';
 
 const itemStyle = {
   backgroundColor: 'white',
@@ -55,7 +55,7 @@ export default function ImageEditor({ imageList }) {
   // Obtener el nombre del usuario del recurso actual
   useEffect(() => {
     if (!imageObj) return;
-    fetchUsuarioByID(setAutor,imageObj.autor_usuario_id);
+    fetchNombreUsuarioByID(setAutor,imageObj.autor_usuario_id);
   }, [imageObj]); // Se usa como dependencia que el objeto imageObj se haya encontrado
 
   // Obtener el nombre de las categorias del recurso actual (separadas por ' | ')

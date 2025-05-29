@@ -49,8 +49,23 @@ export const fetchUsuarios = async (setState) => {
     }
 };
 
-// Recupera el nombre de un usuario usando su id
+// Recupera un usuario usando su email
 export const fetchUsuarioByID = async (setState,userID) => {
+    const { data, error } = await supabase
+        .from('usuarios')
+        .select().eq('email',userID)
+    if (error) {
+      console.error("Error fetching users: ", error);
+    } else {
+      setState(data[0]);
+      console.log("query return: ",data);
+      console.log("id usuario a buscar: ",userID);
+    }
+};
+
+
+// Recupera el nombre de un usuario usando su id
+export const fetchNombreUsuarioByID = async (setState,userID) => {
     const { data, error } = await supabase
         .from('usuarios')
         .select().eq('email',userID)
@@ -122,4 +137,3 @@ export const updateUsuarioCompleto = async (_email,_firstName,_lastName,_usernam
     }
 };
 
-// Actualiza los datos de un Usuario (HACIENDOSE)
