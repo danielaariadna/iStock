@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createClient } from '@supabase/supabase-js'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import Account from './Account';
 
 import './App.css';
 import SquareGrid from './SquareGrid';
@@ -118,6 +119,8 @@ function App() {
           
           } />
             <Route path="/editor/:id" element={<ImageEditor imageList={filteredResources.map(r => r)} />} />
+            <Route path="/cuenta" element={<Account />} />
+  
           </Routes>
         </header>
 

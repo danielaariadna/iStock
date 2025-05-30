@@ -7,8 +7,10 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/material/Menu';
 import iStockLogo from "./buttons/istockLogo.png"
+import { useNavigate } from "react-router-dom"; 
 
 export default function ButtonAppBar() {
+  const navigate = useNavigate()
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ bgcolor: "#000" }}>
@@ -34,7 +36,9 @@ export default function ButtonAppBar() {
           </Typography>
           <Button color="inherit">Precios</Button>
           <Button color="inherit">Boards</Button>
-          <Button color="inherit">Cuenta</Button>
+          <Button color="inherit" onClick={() => navigate("/cuenta")}>
+            Cuenta
+          </Button>
         </Toolbar>
       </AppBar>
     </Box>
