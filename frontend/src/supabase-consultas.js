@@ -57,9 +57,12 @@ export const fetchUsuarioByID = async (setState,userID) => {
     if (error) {
       console.error("Error fetching users: ", error);
     } else {
-      setState(data[0]);
-      console.log("query return: ",data);
-      console.log("id usuario a buscar: ",userID);
+      if (data.length > 0){
+        setState(data[0]);
+        console.log("query return: ",data);
+        console.log("id usuario a buscar: ",userID);
+      }
+
     }
 };
 
@@ -72,10 +75,12 @@ export const fetchNombreUsuarioByID = async (setState,userID) => {
     if (error) {
       console.error("Error fetching users: ", error);
     } else {
-      setState(data[0].nombre);
-      console.log("query return: ",data);
-      console.log("id usuario a buscar: ",userID);
-      console.log("nombre usuario: ",data[0].nombre);
+      if (data.length > 0){
+        setState(data[0].nombre);
+        console.log("query return: ",data);
+        console.log("id usuario a buscar: ",userID);
+        console.log("nombre usuario: ",data[0].nombre);
+      }
     }
 };
 

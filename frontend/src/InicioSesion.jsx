@@ -1,3 +1,5 @@
+import {fetchUsuarioByID} from "./supabase-consultas";
+
 import { useState } from 'react';
 import {
   Container,
@@ -17,11 +19,17 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import iStockLogo from "./buttons/istockLogo.png";
 import { useNavigate } from 'react-router-dom';
 
-const LoginForm = () => {
+const LoginForm = ({setUsuarioActual}) => {
   const navigate = useNavigate();
 
   // Estado para controlar mostrar/ocultar la contraseña
   const [showPassword, setShowPassword] = useState(false);
+
+  // Estados para guardar email y contraseña
+  const [email,setEmail] = useState("");
+  const [password,setPassword] = useState("");
+  const [usuarioSinAutorizacion,setUsuarioSinAutorizacion] = useState({});
+  
 
   const handleClickShowPassword = () => {
     setShowPassword((show) => !show);
@@ -32,8 +40,17 @@ const LoginForm = () => {
   };
 
   const handleClickIniciarSesion = () => {
-    setShowPassword((show) => !show);
+    console.log("datos: ",email,password);
+    fetchUsuarioByID(setUsuarioSinAutorizacion,email);
   };
+
+  // Comprobación de inicio de sesión
+  if(usuarioSinAutorizacion.contraseña === password){
+    setUsuarioActual(usuarioSinAutorizacion); // Necesario para guardar el estado del usuario que actualmente inició sesión
+    setUsuarioSinAutorizacion({});
+    console.log("Sesión Validada");
+    navigate('/');
+  }
 
   return (
     <Box
@@ -102,6 +119,7 @@ const LoginForm = () => {
                 label="Email o nombre de usuario"
                 type="email"
                 sx={{ fontFamily: 'Poppins, sans-serif' }}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <TextField
                 fullWidth
@@ -109,6 +127,7 @@ const LoginForm = () => {
                 label="Contraseña"
                 type={showPassword ? 'text' : 'password'}  // Cambia tipo según showPassword
                 sx={{ fontFamily: 'Poppins, sans-serif' }}
+                onChange={(e) => setPassword(e.target.value)}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -154,6 +173,7 @@ const LoginForm = () => {
                     backgroundColor: '#12b096',
                   }
                 }}
+                onClick={handleClickIniciarSesion}
               >
                 Iniciar sesión
               </Button>

@@ -113,7 +113,7 @@ function App() {
         </Route>
 
         {/* Rutas sin NavBar ni Footer */}
-        <Route path="/iniciosesion" element={<InicioSesion />} />
+        <Route path="/iniciosesion" element={<InicioSesion setUsuarioActual={setUsuarioActual}/>} />
         <Route path="/registro" element={<Registrarse />} />
       </Routes>
     </Router>
