@@ -1,40 +1,125 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/material/Menu';
-import iStockLogo from "./buttons/istockLogo.png"
+import {AppBar, Box, Toolbar, Button, IconButton, Drawer, List, ListItem, ListItemText, useMediaQuery, useTheme } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import { useNavigate } from 'react-router-dom';
+import iStockLogo from "./buttons/istockLogo.png";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+
 
 export default function ButtonAppBar() {
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const navigate = useNavigate();
+
+  const handleDrawerToggle = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
+  const handleNavItemClick = (item) => {
+    if (item === "Iniciar Sesion") {
+      navigate('/iniciosesion');
+    } else {
+      console.log(`Navegando a ${item} (aún no implementado)`);
+    }
+  };
+
+  // División de ítems
+  const leftNavItems = ["Videos ", "Fotos", "Ilustraciones", "Vectores", "Recursos"];
+  const rightNavItems = ["Precios", "Boards"];
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ bgcolor: "#000" }}>
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-          <MenuIcon />
-          <img src={iStockLogo} alt="" style={{"width":"120px","height":"auto"}}/>
-          </IconButton>
-          <Button color="inherit">Videos</Button>
-          <Button color="inherit">Fotos</Button>
-          <Button color="inherit">Ilustraciones</Button>
-          <Button color="inherit">Vectores</Button>
-          
-          <Button color="inherit">Recursos</Button>
-          <Typography variant="p" component="div" sx={{ flexGrow: 1 }}>
-            
-          </Typography>
-          <Button color="inherit">Precios</Button>
-          <Button color="inherit">Boards</Button>
-          <Button color="inherit">Cuenta</Button>
+          {/* Logo */}
+          <Box display="flex" alignItems="center" sx={{ mr: 2 }}>
+            <img src={iStockLogo} alt="iStock" style={{ width: "100px", height: "auto" }} />
+          </Box>
+
+          {/* Menú izquierdo */}
+          {!isMobile && (
+            <Box display="flex" gap={1}>
+              {leftNavItems.map((item) => (
+                <Button
+                  key={item}
+                  color="inherit"
+                  onClick={() => handleNavItemClick(item)}
+                  sx={{ textTransform: 'none', display: 'flex', alignItems: 'center', gap: 0.5 }}
+                >
+                  {item}
+                  <KeyboardArrowDownIcon sx={{ fontSize: 18 }} />
+                </Button>
+              ))}
+            </Box>
+          )}
+
+          {/* Espacio separador */}
+          <Box sx={{ flexGrow: 1 }} />
+
+          {/* Menú derecho */}
+          {!isMobile && (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              {rightNavItems.map((item) => (
+                <Button
+                  key={item}
+                  color="inherit"
+                  onClick={() => handleNavItemClick(item)}
+                  sx={{ textTransform: 'none' }}
+                >
+                  {item}
+                </Button>
+              ))}
+              <Button
+                onClick={() => handleNavItemClick("Iniciar Sesion")}
+                variant="contained"
+                sx={{
+                  backgroundColor: "#20ad87",
+                  color: "#fff",
+                  textTransform: "none",
+                  '&:hover': {
+                    backgroundColor: "#1d9272"
+                  }
+                }}
+              >
+                Iniciar sesión
+              </Button>
+            </Box>
+          )}
+
+          {/* Menú hamburguesa para móviles */}
+          {isMobile && (
+            <>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="end"
+                onClick={handleDrawerToggle}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Drawer
+                anchor="left"
+                open={drawerOpen}
+                onClose={handleDrawerToggle}
+              >
+                <Box
+                  sx={{ width: 250 }}
+                  role="presentation"
+                  onClick={handleDrawerToggle}
+                  onKeyDown={handleDrawerToggle}
+                >
+                  <List>
+                    {[...leftNavItems, ...rightNavItems, "Iniciar Sesion"].map((text) => (
+                      <ListItem button key={text} onClick={() => handleNavItemClick(text)}>
+                        <ListItemText primary={text} />
+                      </ListItem>
+                    ))}
+                  </List>
+                </Box>
+              </Drawer>
+            </>
+          )}
         </Toolbar>
       </AppBar>
     </Box>

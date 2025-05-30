@@ -99,7 +99,7 @@ export const fetchCategoriasByResourceID = async (setState,resourceID) => {
 };
 
 // Inserta un Usuario a la base de datos
-export const insertUsuarioBasico = async (_email,_contraseña,_pais,_enableNotif) => {
+export const insertUsuarioBasico = async (_email,_contraseña,_pais,_enableNotif,setSucessState) => {
     const userDataObj = {
       email: _email,
       contraseña: _contraseña,
@@ -113,8 +113,12 @@ export const insertUsuarioBasico = async (_email,_contraseña,_pais,_enableNotif
         .insert(userDataObj).single();
     if (error) {
       console.error("Error inserting usuarios: ", error);
+      setSucessState(1); // Error en la inserción
+      //return false;
     } else {
       console.log("Insercion de ",userDataObj, " exitosa");
+      setSucessState(2); // Exito en la insercion
+      //return true;
     }
 };
 
@@ -132,8 +136,10 @@ export const updateUsuarioCompleto = async (_email,_firstName,_lastName,_usernam
         .update(userDataObj).eq("email",_email);
     if (error) {
       console.error("Error updating usuarios: ", error);
+      return false;
     } else {
       console.log("Modificacion de ",userDataObj, " exitosa");
+      return true;
     }
 };
 

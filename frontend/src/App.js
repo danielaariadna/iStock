@@ -9,6 +9,11 @@ import ButtonAppBar from './NavBar';
 import Footer from './Footer';
 import ImageEditor from "./EditorPage"; 
 
+import InicioSesion from "./InicioSesion";
+import Registrarse from "./Registrarse";
+import LayoutConNavbar from './LayoutConNavbar';
+
+
 import supabase from "./supabase-client"; // Permite un singleton con la conexión a la base de datos
 
 import {fetchResources, insertUsuarioBasico, updateUsuarioCompleto} from "./supabase-consultas";
@@ -22,6 +27,9 @@ function App() {
   const [filter, setFilter] = useState('Todas');
   const [inputValue, setInputValue] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Estado del usuario que actualmente inició sesión
+  const [usuarioActual,setUsuarioActual] = useState({});
 
   // Obtener recursos con sus categorías al montar el componente
   useEffect(() => {
@@ -61,60 +69,53 @@ function App() {
 
   return (
     <Router>
-      <div className="App">
-        <ButtonAppBar />
+      <Routes>
+        {/* Rutas con NavBar y Footer */}
+        <Route element={<LayoutConNavbar />}>
+          <Route path="/" element={
+            <div style={{ display: "flex", flexDirection: 'column', flexGrow: "1", width: "100%" }}>
+              <div style={{ padding: '15px', backgroundColor: '#fff', display: 'flex', alignItems: 'center', gap: '10px', maxWidth: '2000px' }}>
+                <select
+                  value={filter}
+                  onChange={(e) => {
+                    setFilter(e.target.value);
+                    setInputValue('');
+                    setSearchTerm('');
+                  }}
+                  style={{ padding: '15px', fontSize: '16px' }}
+                >
+                  <option value="Todas">Todas</option>
+                  <option value="1">Aire Libre</option>
+                  <option value="2">Paisaje</option>
+                  <option value="3">Argentina</option>
+                  <option value="4">Comida</option>
+                  <option value="5">Animales</option>
+                  <option value="6">Flores</option>
+                  <option value="7">Música</option>
+                  <option value="8">Deportes</option>
+                </select>
 
-        
-        
-
-        <header className="App-header">
-          <Routes>
-            <Route path="/" element={
-              <div style={{"display":"flex","flexDirection": 'column',"flex-grow":"1","width":"100%"}}>
-                <>
-                {/*Barra de Busqueda*/}
-                <div style={{ padding: '15px', backgroundColor: '#fff', display: 'flex', alignItems: 'center', gap: '10px', maxWidth: '2000px' }}>
-                  <select
-                    value={filter}
-                    onChange={(e) => setFilter(e.target.value)}
-                    style={{ padding: '15px', fontSize: '16px' }}
-                  >
-                    <option value="Todas">Todas</option>
-                    <option value="1">Aire Libre</option>
-                    <option value="2">Paisaje</option>
-                    <option value="3">Argentina</option>
-                    <option value="4">Comida</option>
-                    <option value="5">Animales</option>
-                    <option value="6">Flores</option>
-                    <option value="7">Música</option>
-                    <option value="8">Deportes</option>
-                  
-                  </select>
-
-                  <input
-                    type="search"
-                    placeholder="Buscar por palabra clave (ej: agua, verde...)"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    style={{ flexGrow: 1, padding: '15px', fontSize: '16px' }}
-                  />
-                </div>
-                </>
-
-                {/*Grilla de Imagenes*/}
-                <SquareGrid imageList={filteredResources}/>
+                <input
+                  type="search"
+                  placeholder="Buscar por palabra clave (ej: agua, verde...)"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  style={{ flexGrow: 1, padding: '15px', fontSize: '16px' }}
+                />
               </div>
-          
-          } />
-            <Route path="/editor/:id" element={<ImageEditor imageList={filteredResources.map(r => r)} />} />
-          </Routes>
-        </header>
 
-        <footer>
-          <Footer />
-        </footer>
-      </div>
+              <SquareGrid imageList={filteredResources} />
+            </div>
+          } />
+
+          <Route path="/editor/:id" element={<ImageEditor imageList={filteredResources} />} />
+        </Route>
+
+        {/* Rutas sin NavBar ni Footer */}
+        <Route path="/iniciosesion" element={<InicioSesion />} />
+        <Route path="/registro" element={<Registrarse />} />
+      </Routes>
     </Router>
   );
 }
