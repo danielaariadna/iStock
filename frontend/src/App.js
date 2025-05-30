@@ -1,31 +1,60 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from "react";
+import { createClient } from '@supabase/supabase-js';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
-import foto1 from './photos/1.jpg';
-import foto2 from './photos/2.jpg';
-import foto3 from './photos/3.jpg';
-import foto4 from './photos/4.jpg';
-import foto5 from './photos/5.jpg';
-import foto6 from './photos/6.jpg';
-import foto7 from './photos/7.jpg';
 
 import './App.css';
 import SquareGrid from './SquareGrid';
-import ButtonAppBar from './NavBar';
-import Footer from './Footer';
-import ImageEditor from './EditorPage';
+import ImageEditor from "./EditorPage";
+import InicioSesion from "./InicioSesion";
+import Registrarse from "./Registrarse";
+import LayoutConNavbar from './LayoutConNavbar';
+
+const supabaseUrl = 'https://iennmlivjcdgfdccxinc.supabase.co';
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllbm5tbGl2amNkZ2ZkY2N4aW5jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc3ODc2NjQsImV4cCI6MjA2MzM2MzY2NH0.Y-7YQeSAk0-pDj9kOoaJkHDBvzeh7KDPSFzySTMOp10";
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 function App() {
-  const fotos = [foto1, foto2, foto3, foto4, foto5, foto6, foto7];
-
-  const [imageList] = useState(
-    () => Array.from({ length: 100 }, () => fotos[Math.floor(Math.random() * fotos.length)])
-  );
-
+  const [resources, setResources] = useState([]);
+  const [filter, setFilter] = useState('Todas');
   const [inputValue, setInputValue] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const [filter, setFilter] = useState('Todas');
+  useEffect(() => {
+    async function fetchResources() {
+      const { data, error } = await supabase
+        .from('recursos')
+        .select(`
+          *,
+          recurso_pertenecea_categoria (
+            categoria_codigo
+          )
+        `);
+
+      if (error) {
+        console.error('Error al cargar recursos:', error);
+      } else {
+        setResources(data);
+      }
+    }
+
+    fetchResources();
+  }, []);
+
+  const filteredResources = resources.filter(resource => {
+    if (filter !== 'Todas') {
+      const categoriasIds = resource.recurso_pertenecea_categoria.map(c => c.categoria_codigo.toString());
+      if (!categoriasIds.includes(filter)) {
+        return false;
+      }
+    }
+
+    const palabras = resource.palabras_claves_busqueda?.toLowerCase().split(';').map(p => p.trim()) || [];
+    if (searchTerm.trim() !== '' && !palabras.some(palabra => palabra.includes(searchTerm.toLowerCase()))) {
+      return false;
+    }
+
+    return true;
+  });
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
@@ -33,59 +62,55 @@ function App() {
     }
   };
 
-  const filteredImages = imageList.filter(img => {
-    const filename = img.split('/').pop();
-
-    if (filter !== 'Todas' && !filename.startsWith(filter)) {
-      return false;
-    }
-
-    if (!filename.toLowerCase().includes(searchTerm.toLowerCase())) {
-      return false;
-    }
-
-    return true;
-  });
-
   return (
     <Router>
-      <div className="App">
-        <ButtonAppBar />
-        <div style={{ padding: '15px', backgroundColor: '#fff', display: 'flex', alignItems: 'center', gap: '10px', maxWidth: '2000px' }}>
-          <select
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            style={{ padding: '15px', fontSize: '16px' }}
-          >
-            <option value="Todas">Todas</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-          </select>
+      <Routes>
+        {/* Rutas con NavBar y Footer */}
+        <Route element={<LayoutConNavbar />}>
+          <Route path="/" element={
+            <div style={{ display: "flex", flexDirection: 'column', flexGrow: "1", width: "100%" }}>
+              <div style={{ padding: '15px', backgroundColor: '#fff', display: 'flex', alignItems: 'center', gap: '10px', maxWidth: '2000px' }}>
+                <select
+                  value={filter}
+                  onChange={(e) => {
+                    setFilter(e.target.value);
+                    setInputValue('');
+                    setSearchTerm('');
+                  }}
+                  style={{ padding: '15px', fontSize: '16px' }}
+                >
+                  <option value="Todas">Todas</option>
+                  <option value="1">Aire Libre</option>
+                  <option value="2">Paisaje</option>
+                  <option value="3">Argentina</option>
+                  <option value="4">Comida</option>
+                  <option value="5">Animales</option>
+                  <option value="6">Flores</option>
+                  <option value="7">Música</option>
+                  <option value="8">Deportes</option>
+                </select>
 
-          <input
-            type="search"
-            placeholder="Buscar imagen (ej: 1, 2, 3...)"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyDown={handleKeyDown}
-            style={{ flexGrow: 1, padding: '15px', fontSize: '16px' }}
-          />
-        </div>
-        <header className="App-header">
-          <Routes>
-            <Route path="/" element={<SquareGrid imageList={filteredImages} />} />
-            <Route path="/editor/:id" element={<ImageEditor imageList={imageList} />} />
-          </Routes>
-        </header>
-        <footer>
-          <Footer />
-        </footer>
-      </div>
+                <input
+                  type="search"
+                  placeholder="Buscar por palabra clave (ej: agua, verde...)"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  style={{ flexGrow: 1, padding: '15px', fontSize: '16px' }}
+                />
+              </div>
+
+              <SquareGrid imageList={filteredResources} />
+            </div>
+          } />
+
+          <Route path="/editor/:id" element={<ImageEditor imageList={filteredResources} />} />
+        </Route>
+
+        {/* Rutas sin NavBar ni Footer */}
+        <Route path="/iniciosesion" element={<InicioSesion />} />
+        <Route path="/registro" element={<Registrarse />} />
+      </Routes>
     </Router>
   );
 }

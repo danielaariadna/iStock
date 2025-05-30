@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import foto1 from './photos/8.jpg';
 import IconRecortar from './photos/recortar.png';
 import IconAñadirTexto from './photos/texto.png';
 import IconEliminarFondo from './photos/tijera.png';
@@ -9,6 +8,7 @@ import IconEliminarObjetos from './photos/borrar.png';
 import IconReemplazar from './photos/pinceles.png';
 import IconGuardar from './photos/guardar.png';
 import IconProbar from './photos/descargar.png';
+import ImageInfo from './ImageInfo';
 
 const itemStyle = {
   backgroundColor: 'white',
@@ -33,11 +33,21 @@ export default function ImageEditor({ imageList }) {
   const [selectedOption, setSelectedOption] = useState('gratis');
 
   const imageId = parseInt(id, 10);
-  const imageObj = imageList[imageId];
+
+  // Buscar imagen dentro de imageList que coincida con la id del parametro
+  var newImageObj;
+  for(let i = 0; i < imageList.length; i++){
+    if(imageList[i].id === imageId){
+      newImageObj = imageList[i];
+      break;
+    }
+  }
+  const imageObj = newImageObj;//imageList[imageId];
   
   console.log("ID:", id);
   console.log("imageId:", imageId);
   console.log("imageList.length:", imageList.length);
+  console.log("imageList: ",imageList);
   console.log("imageObj:", imageObj);
   if (!imageObj) {
     return <div>Imagen no encontrada</div>;
@@ -96,6 +106,10 @@ export default function ImageEditor({ imageList }) {
 
         {/* Panel central */}
         <main style={{ flex: 1, padding: '20px', textAlign: 'center', backgroundColor: '#fff' }}>
+          <div style={{color: '#000',textAlign: 'left'}}>
+            Titulo: {imageObj.titulo}<br/>
+            Tags: {imageObj.palabras_claves_busqueda}
+          </div>
           <div style={{ marginBottom: '15px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
             <button
               style={{
@@ -140,7 +154,7 @@ export default function ImageEditor({ imageList }) {
   }}
 >
   <img
-    src={imageObj}
+    src={imageObj.ruta_archivo}
     alt={`Imagen ${imageId}`}
     style={{
         width: '900x', 
@@ -167,7 +181,7 @@ export default function ImageEditor({ imageList }) {
     style={{ width: '120px', height: 'auto' }} 
   />
     <br />
-    Credit: autor_de_prueba
+    Credit: {imageObj.autor_usuario_id}
   </div>
   
 </div>
@@ -183,7 +197,7 @@ export default function ImageEditor({ imageList }) {
       Descripción
     </p>
     <p style={{ margin: '5px 0 0', fontSize: '14px', color: '#555' }}>
-    Hand Drawn Daisy Flowers and Leaves Background
+    {imageObj.descripcion}
     </p>
   </div>
           
@@ -215,7 +229,7 @@ export default function ImageEditor({ imageList }) {
     }}
   >
     <p style={{ fontWeight: 'bold', fontSize: '18px', margin: 0 }}>
-      AR$5.800 por esta imagen
+      AR${imageObj.precio} por esta imagen
     </p>
   </div>
 
@@ -298,6 +312,8 @@ export default function ImageEditor({ imageList }) {
           >
             Ver planes y precio
           </button>
+          {/*Información del archivo*/}
+          <ImageInfo image={imageObj}></ImageInfo>
 </aside>
         
       </div>
@@ -310,7 +326,7 @@ export default function ImageEditor({ imageList }) {
         textAlign: 'center',
         borderTop: '1px solid #ccc'
       }}>
-        
+      
       </div>
     </div>
   );

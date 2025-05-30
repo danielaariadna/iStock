@@ -6,19 +6,11 @@ export default function SquareGrid({ imageList }) {
   const navigate = useNavigate();
 
   const handleClick = (index) => {
-    navigate(`/editor/${index}`);
+    //navigate(`/editor/${index}`);
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: '30px',
-        padding: '20px',
-        justifyContent: 'center',
-      }}
-    >
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '30px', padding: '20px', justifyContent: 'center' }}>
       {imageList.map((image, index) => (
         <div
           key={index}
