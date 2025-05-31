@@ -225,74 +225,9 @@ const LoginForm = ({setUsuarioActual}) => {
       </Box>
 
       <Box component="footer" sx={{ mt: 4 }}>
-        {/* Parte superior: oscuro */}
-        <Box
-          sx={{
-            backgroundColor: '#0a0a0a',
-            color: '#fff',
-            px: 2,
-            py: 2,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            fontFamily: 'Poppins, sans-serif',
-            fontSize: '14px',
-            height: '80px',
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: '#0a0a0a',
-              color: '#FFF',
-              fontSize: '20px',
-              padding: '14px',
-              flexGrow: 1,
-              textAlign: 'center',
-            }}
-          >
-            Ahorra en las imágenes de alta calidad que más te gustan.{' '}
-            <span style={{ color: '#00CC99', marginLeft: '6px' }}>Suscríbete hoy.</span>
-          </div>
-          <Typography
-            component="a"
-            href="./"
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{
-              mt: { xs: 1, sm: 0 },
-              color: '#ccc',
-              textDecoration: 'none',
-              fontSize: '14px',
-              display: 'block',
-              textAlign: 'center',
-              '&:hover': {
-                textDecoration: 'underline',
-                color: '#00CC99',
-              },
-            }}
-          >
-            546005278, MATJAZ SLANIC
-          </Typography>
-        </Box>
+      
 
-        {/* Parte inferior: clara */}
-        <Box
-          sx={{
-            backgroundColor: 'rgba(148, 148, 148, 0.8)', // gris claro con transparencia
-            color: 'rgb(74, 74, 74)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            textAlign: 'center',
-            py: 1,
-            fontSize: '11.5px',
-            fontFamily: 'Poppins, sans-serif',
-            height: '40px',
-          }}
-        >
-          ©2025 iStockphoto LP. El diseño de iStock es una marca comercial de iStockphoto LP.
-        </Box>
+      
       </Box>
     </Box>
   );
