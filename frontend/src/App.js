@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 //import { createClient } from '@supabase/supabase-js'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import Account from './Account';
 
 import './App.css';
 import SquareGrid from './SquareGrid';
@@ -69,53 +70,59 @@ function App() {
 
   return (
     <Router>
-      <Routes>
-        {/* Rutas con NavBar y Footer */}
-        <Route element={<LayoutConNavbar />}>
-          <Route path="/" element={
-            <div style={{ display: "flex", flexDirection: 'column', flexGrow: "1", width: "100%" }}>
-              <div style={{ padding: '15px', backgroundColor: '#fff', display: 'flex', alignItems: 'center', gap: '10px', maxWidth: '2000px' }}>
-                <select
-                  value={filter}
-                  onChange={(e) => {
-                    setFilter(e.target.value);
-                    setInputValue('');
-                    setSearchTerm('');
-                  }}
-                  style={{ padding: '15px', fontSize: '16px' }}
-                >
-                  <option value="Todas">Todas</option>
-                  <option value="1">Aire Libre</option>
-                  <option value="2">Paisaje</option>
-                  <option value="3">Argentina</option>
-                  <option value="4">Comida</option>
-                  <option value="5">Animales</option>
-                  <option value="6">Flores</option>
-                  <option value="7">Música</option>
-                  <option value="8">Deportes</option>
-                </select>
+      <div className="App">
+        <Routes>
+          {/* Rutas con Navbar y Footer */}
+          <Route element={<LayoutConNavbar />}>
+            <Route path="/" element={
+              <div style={{ display: "flex", flexDirection: 'column', flexGrow: "1", width: "100%" }}>
+                <div style={{ padding: '15px', backgroundColor: '#fff', display: 'flex', alignItems: 'center', gap: '10px', maxWidth: '2000px' }}>
+                  <select
+                    value={filter}
+                    onChange={(e) => {
+                      setFilter(e.target.value);
+                      setInputValue('');
+                      setSearchTerm('');
+                    }}
+                    style={{ padding: '15px', fontSize: '16px' }}
+                  >
+                    <option value="Todas">Todas</option>
+                    <option value="1">Aire Libre</option>
+                    <option value="2">Paisaje</option>
+                    <option value="3">Argentina</option>
+                    <option value="4">Comida</option>
+                    <option value="5">Animales</option>
+                    <option value="6">Flores</option>
+                    <option value="7">Música</option>
+                    <option value="8">Deportes</option>
+                  </select>
 
-                <input
-                  type="search"
-                  placeholder="Buscar por palabra clave (ej: agua, verde...)"
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  style={{ flexGrow: 1, padding: '15px', fontSize: '16px' }}
-                />
+                  <input
+                    type="search"
+                    placeholder="Buscar por palabra clave (ej: agua, verde...)"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    style={{ flexGrow: 1, padding: '15px', fontSize: '16px' }}
+                  />
+                </div>
+
+                <SquareGrid imageList={filteredResources} />
               </div>
+            } />
 
-              <SquareGrid imageList={filteredResources} />
-            </div>
-          } />
+            <Route path="/editor/:id" element={<ImageEditor imageList={filteredResources} />} />
+            <Route path="/cuenta" element={<Account usuario={usuarioActual} />} />
+          </Route>
 
-          <Route path="/editor/:id" element={<ImageEditor imageList={filteredResources} />} />
-        </Route>
+          {/* Rutas sin Navbar ni Footer */}
+          <Route path="/iniciosesion" element={<InicioSesion setUsuarioActual={setUsuarioActual} />} />
+          <Route path="/registro" element={<Registrarse />} />
 
-        {/* Rutas sin NavBar ni Footer */}
-        <Route path="/iniciosesion" element={<InicioSesion setUsuarioActual={setUsuarioActual}/>} />
-        <Route path="/registro" element={<Registrarse />} />
-      </Routes>
+        </Routes>
+
+        <Footer />
+      </div>
     </Router>
   );
 }

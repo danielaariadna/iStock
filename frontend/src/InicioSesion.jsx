@@ -49,7 +49,7 @@ const LoginForm = ({setUsuarioActual}) => {
     setUsuarioActual(usuarioSinAutorizacion); // Necesario para guardar el estado del usuario que actualmente inició sesión
     setUsuarioSinAutorizacion({});
     console.log("Sesión Validada");
-    navigate('/');
+    navigate('/cuenta');
   }
 
   return (
