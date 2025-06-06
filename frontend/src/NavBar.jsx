@@ -6,7 +6,7 @@ import iStockLogo from "./buttons/istockLogo.png";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 
-export default function ButtonAppBar() {
+export default function ButtonAppBar({usuarioActual}) {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -17,11 +17,22 @@ export default function ButtonAppBar() {
   };
 
   const handleNavItemClick = (item) => {
-    if (item === "Iniciar Sesion") {
+    switch(item){
+      case "Iniciar Sesion":
+        navigate('/iniciosesion');
+        break;
+      case "Ver Perfil":
+        navigate('/cuenta');
+        break;
+      default:
+        console.log(`Navegando a ${item} (aún no implementado)`);
+        break;
+    }
+    /*if (item === "Iniciar Sesion") {
       navigate('/iniciosesion');
     } else {
       console.log(`Navegando a ${item} (aún no implementado)`);
-    }
+    }*/
   };
 
   // División de ítems

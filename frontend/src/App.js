@@ -17,7 +17,7 @@ import LayoutConNavbar from './LayoutConNavbar';
 
 import supabase from "./supabase-client"; // Permite un singleton con la conexión a la base de datos
 
-import {fetchResources, insertUsuarioBasico, updateUsuarioCompleto} from "./supabase-consultas";
+import {fetchResources, insertUsuarioBasico, updateUsuarioCompleto,insertCompraRecurso,fetchRecursosCompradosPorUsuario} from "./supabase-consultas";
 
 function App() {
   // Estado para recursos (con categorías)
@@ -61,6 +61,9 @@ function App() {
   //insertUsuarioBasico("jeremiasjulian5003@gmail.com",1234,"argentina",false);
   //updateUsuarioCompleto("jeremiasjulian5003@gmail.com","Jere","Julian","google 2");
 
+  //insertCompraRecurso("jeremiasjulian5003@gmail.com",1111222233334444,3);
+  //fetchRecursosCompradosPorUsuario(null,"jeremiasjulian5003@gmail.com");
+
   // Manejo de la búsqueda con Enter
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
@@ -73,7 +76,7 @@ function App() {
       <div className="App">
         <Routes>
           {/* Rutas con Navbar y Footer */}
-          <Route element={<LayoutConNavbar />}>
+          <Route element={<LayoutConNavbar usuarioActual={usuarioActual}/>}>
             <Route path="/" element={
               <div style={{ display: "flex", flexDirection: 'column', flexGrow: "1", width: "100%" }}>
                 <div style={{ padding: '15px', backgroundColor: '#fff', display: 'flex', alignItems: 'center', gap: '10px', maxWidth: '2000px' }}>
@@ -121,7 +124,7 @@ function App() {
 
         </Routes>
 
-        <Footer />
+        
       </div>
     </Router>
   );
