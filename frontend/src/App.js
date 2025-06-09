@@ -17,7 +17,9 @@ import LayoutConNavbar from './LayoutConNavbar';
 
 import supabase from "./supabase-client"; // Permite un singleton con la conexión a la base de datos
 
-import {fetchResources, insertUsuarioBasico, updateUsuarioCompleto,insertCompraRecurso,fetchRecursosCompradosPorUsuario} from "./supabase-consultas";
+//import {insertCompraRecursoUsandoSubscripcion,insertCompraSubscripcion,updateUsuarioSoloSubscripcion,insertCompraRecursoUsandoCreditos,updateUsuarioSoloCreditos,insertCompraCreditos,fetchPaqueteCreditosByID,purchaseHash,fetchResources, insertUsuarioBasico, updateUsuarioCompleto,insertCompraRecurso,fetchRecursosCompradosPorUsuario} from "./supabase-consultas";
+//import {} from "./business-logic"
+import {fetchResources} from "./supabase-consultas";
 
 function App() {
   // Estado para recursos (con categorías)
@@ -63,6 +65,21 @@ function App() {
 
   //insertCompraRecurso("jeremiasjulian5003@gmail.com",1111222233334444,3);
   //fetchRecursosCompradosPorUsuario(null,"jeremiasjulian5003@gmail.com");
+
+  //console.log(purchaseHash("jeremiasjulian5003@gmail.com"));
+
+  //updateUsuarioSoloCreditos("jeremiasjulian5003@gmail.com",300);
+  
+  //fetchPaqueteCreditosByID(null,300);
+
+  //insertCompraCreditos("jeremiasjulian5003@gmail.com",1111222233334444,300);
+  //insertCompraRecursoUsandoCreditos("jeremiasjulian5003@gmail.com",3);
+  //insertCompraRecursoUsandoCreditos("test@gmail.com",3);
+  //updateUsuarioSoloSubscripcion("jeremiasjulian5003@gmail.com",2,120,4);
+
+  //insertCompraSubscripcion("jeremiasjulian5003@gmail.com",1111222233334444,2);
+
+  //insertCompraRecursoUsandoSubscripcion("test@gmail.com",4);
 
   // Manejo de la búsqueda con Enter
   const handleKeyDown = (event) => {
