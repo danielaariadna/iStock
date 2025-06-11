@@ -259,6 +259,7 @@ tabsContainer: {
     width: '250px', 
   },
 };
+
 const creditData = [
     [
       { credits: 1, price: 5800 },
@@ -291,9 +292,6 @@ const creditData = [
     return { images, videos };
   };
 
-  // For toggle styling - this is the trickiest part with inline styles.
-  // We'll do a little workaround for the toggle slider "thumb" and background color.
-  // To keep simple, let's create a small component for the toggle switch.
 
   const ToggleSwitch = ({ checked, onChange }) => {
     return (
@@ -329,7 +327,7 @@ const creditData = [
       </label>
     );
   };
-
+  const [hovered, setHovered] = useState(null);
   return (
     <div style={styles.container}>
       <h1 style={{ fontSize: '25px' }}>
@@ -398,27 +396,57 @@ const creditData = [
             </svg>
           </button>
         )}
+{creditData[page].map((item, index) => {
+  const isActive = selected === index || hovered === index;
+  const isSelected = selected === index;
 
-        {creditData[page].map((item, index) => (
-          <div
-            key={index}
-            style={{
-              ...styles.card,
-              border: selected === index ? '2px solid #00f7c2' : '1px solid #ccc',
-              backgroundColor: '#fff',
-              color: selected === index ? '#000' : '#666E6E',
-            }}
-            onClick={() => handleSelect(index)}
-          >
-            <div style={styles.credits}>{item.credits}</div>
-            <div>Créditos</div>
-            <div style={styles.price}>AR$ {item.price.toLocaleString()}</div>
-            {item.savings && (
-              <div style={styles.savings}>Ahorrás AR$ {item.savings.toLocaleString()}</div>
-            )}
-          </div>
-        ))}
-
+  return (
+    <div
+      key={index}
+      style={{
+        ...styles.card,
+        position: 'relative', // importante para el icono absoluto
+        border: isActive ? '3px solid #34B59F' : '1px solid #ccc',
+        backgroundColor: isActive ? '#fff' : '#f9f9f9',
+        color: isActive ? '#000' : '#666E6E',
+        cursor: 'pointer',
+        transition: 'all 0.3s ease',
+      }}
+      onClick={() => handleSelect(index)}
+      onMouseEnter={() => setHovered(index)}
+      onMouseLeave={() => setHovered(null)}
+    >
+      {isSelected && (
+        <div style={{
+          position: 'absolute',
+          top: '8px',
+          left: '8px',
+          backgroundColor: '#34B59F',
+          color: 'white',
+          borderRadius: '50%',
+          width: '20px',
+          height: '20px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          fontSize: '14px',
+          fontWeight: 'bold',
+          boxShadow: '0 0 4px rgba(0,0,0,0.2)',
+          zIndex: 10,
+          userSelect: 'none',
+        }}>
+          ✓
+        </div>
+      )}
+      <div style={styles.credits}>{item.credits}</div>
+      <div>Créditos</div>
+      <div style={styles.price}>AR$ {item.price.toLocaleString()}</div>
+      {item.savings && (
+        <div style={styles.savings}>Ahorrás AR$ {item.savings.toLocaleString()}</div>
+      )}
+    </div>
+  );
+})}
         {page < creditData.length - 1 && (
           <button style={styles.navBtn} onClick={() => setPage(page + 1)}>
             <svg width="40" height="40" fill="none" viewBox="0 0 24 24">
@@ -453,7 +481,7 @@ const creditData = [
             onClick={() => {
               if (isLoggedIn) {
                 console.log(`Comprando ${creditData[page][selected]?.credits} créditos`);
-                // Lógica real de compra aquí
+                navigate('/iniciosesion'); //Pagina de Bruno
               } else {
                 console.log('Usuario no logueado, redirigiendo a login...');
                 navigate('/iniciosesion'); // Redirige a login si no está autenticado
