@@ -2,132 +2,194 @@ import React, { useState } from 'react';
 import imagenIcon from './photos/imagen.png';
 import videoIcon from './photos/video.png';
 import fybIcon from './photos/fyb.png';
-const creditData = [
-  [
-    { credits: 1, price: 5800 },
-    { credits: 3, price: 17400 },
-    { credits: 6, price: 34800 },
-    { credits: 12, price: 66200, savings: 3400 },
-    { credits: 18, price: 98100, savings: 6300 },
-  ],
-  [
-    { credits: 24, price: 126500, savings: 12700 },
-    { credits: 36, price: 186800, savings: 22000 },
-    { credits: 60, price: 297000, savings: 51000 },
-    { credits: 150, price: 718100, savings: 151900 },
-    { credits: 300, price: 1378100, savings: 361900 },
-  ],
-];
-
-export default function CreditCarousel() {
-  const [page, setPage] = useState(0);
-  const [selected, setSelected] = useState(2);
-
-  const handleSelect = (index) => {
-    setSelected(index);
-  };
-
-  const getDetails = (credit) => {
-    const images = credit.credits * 1;
-    const videos = credit.credits / 6;
-    return { images, videos };
-  };
-
-  return (
-    <div style={styles.wrapper}>
-      <p style={{ fontSize: '25px' }}>
-        Mueve y conmueve a tus clientes con imágenes y vídeos auténticos y de alta calidad
-      </p>
-      <p style={{ fontSize: '20px' }}>
-        Accede a una amplia biblioteca de imágenes que no encontrarás en ningún otro lugar, sin contenido generado con IA.
-      </p>
-      <p style={{ fontSize: '15px' }}>
-        Los créditos no requieren compromisos y son una fórmula estupenda para obtener archivos que no están incluidos en tu suscripción.
-      </p>
-
-      <div style={styles.carousel}>
-        {page > 0 && (
-          <button style={styles.navBtn} onClick={() => setPage(page - 1)}>
-            <svg width="40" height="40" fill="#fff" viewBox="0 0 24 24">
-              <path d="M15 18l-6-6 6-6" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-        )}
-
-        {creditData[page].map((item, index) => (
-          <div
-            key={index}
-            style={{
-              ...styles.card,
-              border: selected === index ? '2px solid #00f7c2' : '1px solid #ccc',
-              backgroundColor: '#fff',
-              color: selected === index ? '#000' : '#666E6E',
-            }}
-            onClick={() => handleSelect(index)}
-          >
-            <div style={styles.credits}>{item.credits}</div>
-            <div>Créditos</div>
-            <div style={styles.price}>AR$ {item.price.toLocaleString()}</div>
-            {item.savings && (
-              <div style={styles.savings}>Ahorrás AR$ {item.savings.toLocaleString()}</div>
-            )}
-          </div>
-        ))}
-
-        {page < creditData.length - 1 && (
-          <button style={styles.navBtn} onClick={() => setPage(page + 1)}>
-            <svg width="40" height="40" fill="none" viewBox="0 0 24 24">
-              <path d="M9 6l6 6-6 6" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-        )}
-      </div>
-
-      <div style={styles.summary}>
-        <p style={{ fontSize: '15px' }}>Con este paquete podrías obtener hasta:</p>
-        {creditData[page][selected] && (
-          <div style={styles.assets}>
-            <div style={styles.assetItem}>
-              <img src={imagenIcon} alt="imagen" style={styles.icon} />
-              {getDetails(creditData[page][selected]).images} imágenes
-            </div>
-            <div style={styles.assetItem}>
-              <img src={videoIcon} alt="video" style={styles.icon} />
-              {Math.floor(getDetails(creditData[page][selected]).videos)} vídeos
-            </div>
-            <div style={styles.assetItem}>
-              <img src={fybIcon} alt="mezcla" style={styles.icon} />
-              una mezcla de ambos
-            </div>
-          </div>
-        )}
-      </div>
-
-      <button style={styles.buyBtn}>
-        Comprar {creditData[page][selected]?.credits} créditos
-      </button>
-    </div>
-  );
-}
-
+import { useNavigate } from 'react-router-dom';
 const styles = {
-  wrapper: {
+  container: {
+    height: '100vh',
+    width: '100vw',
     backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://www.rmit.edu.au/content/dam/rmit/rmit-images/professorial-academy/professorial-academy-banner.jpg")`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    color: '#fff',
-    padding: '20px',
-    fontFamily: 'sans-serif',
-    borderRadius: '8px',
-    textAlign: 'center',
-    height: '100vh',
-    width: '100vw',
+    backgroundColor: '#191847',
+    color: 'white',
+    padding: '16px',
+    fontFamily: 'Arial, sans-serif',
+  },
+tabsContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '8px',
+    marginTop:'35px',
+    marginBottom: '16px',
+  },
+  tabButton: (active) => ({
+    padding: '8px 19px',
+    borderRadius: '2px',
+    backgroundColor: active ? 'white' : 'rgba(46, 43, 95, 0.6)',
+    color: active ? 'black' : 'white',
+    cursor: 'pointer',
+    border: 'none',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
     alignItems: 'center',
-    boxSizing: 'border-box',
+    fontSize: '15px',
+    width: '220px',
+    height: '50px',  
+  }),
+  tabSmallText: {
+    fontSize: '10px',
+  },
+  subscriptionCard: {
+    maxWidth: '400px',
+    margin: '0 auto',
+    backgroundColor: 'white',
+    color: 'black',
+    borderRadius: '12px',
+    padding: '24px',
+  },
+  toggleContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: '16px',
+    alignItems: 'center',
+  },
+  toggleLabel: {
+    cursor: 'pointer',
+    display: 'inline-flex',
+    alignItems: 'center',
+  },
+  toggleInput: {
+    position: 'absolute',
+    opacity: 0,
+    width: 0,
+    height: 0,
+  },
+  toggleSlider: {
+    width: '44px',
+    height: '24px',
+    backgroundColor: '#ccc',
+    borderRadius: '24px',
+    position: 'relative',
+    transition: 'background-color 0.2s',
+  },
+  toggleSliderBefore: {
+    content: '""',
+    position: 'absolute',
+    width: '18px',
+    height: '18px',
+    left: '3px',
+    bottom: '3px',
+    backgroundColor: 'white',
+    borderRadius: '50%',
+    transition: 'transform 0.2s',
+  },
+  toggleInputCheckedSlider: {
+    backgroundColor: '#319795', // teal-500
+  },
+  toggleInputCheckedBefore: {
+    transform: 'translateX(20px)',
+  },
+  subscriptionTitle: {
+    fontSize: '1.25rem',
+    fontWeight: '600',
+    marginBottom: '8px',
+  },
+  subscriptionDesc: {
+    fontSize: '14px',
+    color: '#4a4a4a',
+    marginBottom: '16px',
+  },
+  downloadButton: {
+    width: '100%',
+    backgroundColor: '#e2e8f0',
+    color: '#000',
+    borderRadius: '8px',
+    padding: '8px 0',
+    fontSize: '14px',
+    border: 'none',
+    marginBottom: '16px',
+    cursor: 'pointer',
+  },
+  creditsContainer: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    marginBottom: '16px',
+  },
+  creditButton: {
+    backgroundColor: '#319795',
+    color: 'white',
+    borderRadius: '9999px',
+    padding: '4px 12px',
+    fontSize: '14px',
+    border: 'none',
+    cursor: 'pointer',
+  },
+  smallTextGray: {
+    fontSize: '12px',
+    color: '#a0aec0',
+    marginBottom: '16px',
+  },
+  priceLarge: {
+    fontSize: '2rem',
+    fontWeight: 'bold',
+  },
+  priceSmall: {
+    fontSize: '14px',
+    fontWeight: 'normal',
+  },
+  pricePerDownload: {
+    fontSize: '14px',
+    marginTop: '4px',
+  },
+  creditsTabContainer: {
+    textAlign: 'center',
+  },
+  creditsPackages: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: '16px',
+  },
+  packageCard: (highlighted) => ({
+    backgroundColor: 'white',
+    color: 'black',
+    padding: '16px',
+    borderRadius: '12px',
+    width: '144px',
+    border: highlighted ? '2px solid #319795' : '1px solid #ddd',
+  }),
+  packageTitle: {
+    fontSize: '18px',
+    fontWeight: '600',
+  },
+  packagePrice: {
+    fontSize: '14px',
+    margin: '4px 0',
+  },
+  packageSavings: {
+    fontSize: '12px',
+    color: '#718096',
+  },
+  creditsSummary: {
+    marginTop: '24px',
+  },
+  creditsSummaryText: {
+    marginBottom: '8px',
+  },
+  creditsSummaryItems: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '24px',
+    marginBottom: '16px',
+  },
+  buyButton: {
+    backgroundColor: '#e53e3e',
+    padding: '12px 24px',
+    borderRadius: '8px',
+    color: 'white',
+    border: 'none',
+    cursor: 'pointer',
   },
   carousel: {
     display: 'flex',
@@ -197,3 +259,216 @@ const styles = {
     width: '250px', 
   },
 };
+const creditData = [
+    [
+      { credits: 1, price: 5800 },
+      { credits: 3, price: 17400 },
+      { credits: 6, price: 34800 },
+      { credits: 12, price: 66200, savings: 3400 },
+      { credits: 18, price: 98100, savings: 6300 },
+    ],
+    [
+      { credits: 24, price: 126500, savings: 12700 },
+      { credits: 36, price: 186800, savings: 22000 },
+      { credits: 60, price: 297000, savings: 51000 },
+      { credits: 150, price: 718100, savings: 151900 },
+      { credits: 300, price: 1378100, savings: 361900 },
+    ],
+  ];
+  const PricingComponent = ({ isLoggedIn }) => {
+  const [activeTab, setActiveTab] = useState('subscriptions');
+  const [annualPlan, setAnnualPlan] = useState(true);
+  const [page, setPage] = useState(0);
+  const [selected, setSelected] = useState(2);
+  const navigate = useNavigate();
+  const handleSelect = (index) => {
+    setSelected(index);
+  };
+
+  const getDetails = (credit) => {
+    const images = credit.credits * 1;
+    const videos = credit.credits / 6;
+    return { images, videos };
+  };
+
+  // For toggle styling - this is the trickiest part with inline styles.
+  // We'll do a little workaround for the toggle slider "thumb" and background color.
+  // To keep simple, let's create a small component for the toggle switch.
+
+  const ToggleSwitch = ({ checked, onChange }) => {
+    return (
+      <label style={styles.toggleLabel}>
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={onChange}
+          style={styles.toggleInput}
+        />
+        <div
+          style={{
+            ...styles.toggleSlider,
+            backgroundColor: checked ? '#319795' : '#ccc',
+          }}
+        >
+          <div
+            style={{
+              ...styles.toggleSliderBefore,
+              transform: checked ? 'translateX(20px)' : 'translateX(0)',
+              position: 'absolute',
+              width: '18px',
+              height: '18px',
+              left: '3px',
+              bottom: '3px',
+              backgroundColor: 'white',
+              borderRadius: '50%',
+              transition: 'transform 0.2s',
+              content: '""',
+            }}
+          />
+        </div>
+      </label>
+    );
+  };
+
+  return (
+    <div style={styles.container}>
+      <h1 style={{ fontSize: '25px' }}>
+        Mueve y conmueve a tus clientes con imágenes y vídeos auténticos y de alta calidad
+      </h1>
+      <p style={{ fontSize: '20px' }}>
+        Accede a una amplia biblioteca de imágenes que no encontrarás en ningún otro lugar, sin contenido generado con IA.
+      </p>
+
+      <div style={styles.tabsContainer}>
+        <button
+          style={styles.tabButton(activeTab === 'subscriptions')}
+          onClick={() => setActiveTab('subscriptions')}
+        >
+          Suscripciones
+          <div style={styles.tabSmallText}>Precio más conveniente</div>
+        </button>
+        <button
+          style={styles.tabButton(activeTab === 'credits')}
+          onClick={() => setActiveTab('credits')}
+        >
+          Paquetes de créditos
+          <div style={styles.tabSmallText}>Pago instantáneo</div>
+        </button>
+        
+      </div>
+      
+      {activeTab === 'subscriptions' ? (
+        <div style={styles.subscriptionCard}>
+          <div style={styles.toggleContainer}>
+            <span>Plan anual</span>
+            <ToggleSwitch checked={annualPlan} onChange={() => setAnnualPlan(!annualPlan)} />
+            <span>Mes a mes</span>
+          </div>
+          <h2 style={styles.subscriptionTitle}>Premium</h2>
+          <p style={styles.subscriptionDesc}>
+            Todas las imágenes, incluidas las imágenes Signature auténticas y de alta calidad que solo puedes encontrar en iStock
+          </p>
+          <button style={styles.downloadButton}>
+            Todas las imágenes son una descarga
+          </button>
+          <div style={styles.creditsContainer}>
+            {[10, 25, 50, 750].map(num => (
+              <button key={num} style={styles.creditButton}>{num}</button>
+            ))}
+          </div>
+          <p style={styles.smallTextGray}>Transferencia de descargas no utilizadas</p>
+          <div>
+            <span style={styles.priceLarge}>AR$ 17.200 </span>
+            <span style={styles.priceSmall}>por mes</span>
+          </div>
+          <p style={styles.pricePerDownload}>AR$ 1.720,00 / descarga</p>
+        </div>
+      ) : (
+        
+        <div style={styles.wrapper}>
+      
+      <p  style={{ fontSize: '15px' }}>
+      Los créditos no requieren compromisos y son una fórmula estupenda para obtener archivos que no están incluidos en tu suscripción.
+      </p>
+      <div style={styles.carousel}>
+        {page > 0 && (
+          <button style={styles.navBtn} onClick={() => setPage(page - 1)}>
+            <svg width="40" height="40" fill="#fff" viewBox="0 0 24 24">
+              <path d="M15 18l-6-6 6-6" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        )}
+
+        {creditData[page].map((item, index) => (
+          <div
+            key={index}
+            style={{
+              ...styles.card,
+              border: selected === index ? '2px solid #00f7c2' : '1px solid #ccc',
+              backgroundColor: '#fff',
+              color: selected === index ? '#000' : '#666E6E',
+            }}
+            onClick={() => handleSelect(index)}
+          >
+            <div style={styles.credits}>{item.credits}</div>
+            <div>Créditos</div>
+            <div style={styles.price}>AR$ {item.price.toLocaleString()}</div>
+            {item.savings && (
+              <div style={styles.savings}>Ahorrás AR$ {item.savings.toLocaleString()}</div>
+            )}
+          </div>
+        ))}
+
+        {page < creditData.length - 1 && (
+          <button style={styles.navBtn} onClick={() => setPage(page + 1)}>
+            <svg width="40" height="40" fill="none" viewBox="0 0 24 24">
+              <path d="M9 6l6 6-6 6" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        )}
+      </div>
+
+      <div style={styles.summary}>
+        <p style={{ fontSize: '15px' }}>Con este paquete podrías obtener hasta:</p>
+        {creditData[page][selected] && (
+          <div style={styles.assets}>
+            <div style={styles.assetItem}>
+              <img src={imagenIcon} alt="imagen" style={styles.icon} />
+              {getDetails(creditData[page][selected]).images} imágenes
+            </div>
+            <div style={styles.assetItem}>
+              <img src={videoIcon} alt="video" style={styles.icon} />
+              {Math.floor(getDetails(creditData[page][selected]).videos)} vídeos
+            </div>
+            <div style={styles.assetItem}>
+              <img src={fybIcon} alt="mezcla" style={styles.icon} />
+              una mezcla de ambos
+            </div>
+          </div>
+        )}
+      </div>
+
+      <button
+            style={styles.buyBtn}
+            onClick={() => {
+              if (isLoggedIn) {
+                console.log(`Comprando ${creditData[page][selected]?.credits} créditos`);
+                // Lógica real de compra aquí
+              } else {
+                console.log('Usuario no logueado, redirigiendo a login...');
+                navigate('/iniciosesion'); // Redirige a login si no está autenticado
+              }
+            }}
+          >
+            Comprar {creditData[page][selected]?.credits} créditos
+          </button>
+    </div>
+        
+      )}
+      
+    </div>
+    
+  );
+};
+
+export default PricingComponent;
