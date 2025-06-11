@@ -10,6 +10,8 @@ import IconGuardar from './photos/guardar.png';
 import IconProbar from './photos/descargar.png';
 import ImageInfo from './ImageInfo';
 
+import supabase from "./supabase-client";
+
 import { fetchResourceByID, fetchNombreUsuarioByID, fetchCategoriasByResourceID } from './supabase-consultas';
 
 const itemStyle = {
@@ -287,43 +289,33 @@ export default function ImageEditor({ imageList }) {
     </p>
   </div>
 
-  {/* Botones según selección */}
-  {selectedOption === 'gratis' ? (
-    <button
-      style={{
-        backgroundColor: '#00796b',
-        color: 'white',
-        padding: '10px 20px',
-        border: 'none',
-        borderRadius: '5px',
-        cursor: 'pointer',
-        marginTop: '20px',
-        width: '100%',
-        fontWeight: 'bold'
-      }}
-      onClick={() => alert('Descargar gratis seleccionado')}
-    >
-      Descargar gratis
-    </button>
-  ) : (
-    <button
-      style={{
-        backgroundColor: '#00796b',
-        color: 'white',
-        padding: '10px 20px',
-        border: 'none',
-        borderRadius: '5px',
-        cursor: 'pointer',
-        marginTop: '20px',
-        width: '100%',
-        fontWeight: 'bold'
-      }}
-      onClick={() => alert('Ver planes y precio seleccionado')}
-    >
-      Continuar con la compra
-    </button>
-    
-  )}
+  <button
+    style={{
+      backgroundColor: '#00796b',
+      color: 'white',
+      padding: '10px 20px',
+      border: 'none',
+      borderRadius: '5px',
+      cursor: 'pointer',
+      marginTop: '20px',
+      width: '100%',
+      fontWeight: 'bold'
+    }}
+    onClick={async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+        navigate('/iniciosesion');
+      } else {
+        navigate(`/caja/${imageObj.id}`, {
+          state: { imageUrl: imageObj.ruta_archivo }
+        });
+      }
+    }}
+  >
+    Continuar con la compra
+  </button>
+
 <button
             style={{
               backgroundColor: '#f44336',

@@ -44,6 +44,9 @@ const Caja = () => {
   const [iva, setIva] = useState('');
   const [noAplica, setNoAplica] = useState(false);
 
+  const location = useLocation();
+  const imageUrl = location.state?.imageUrl;
+
   const [empresa, setEmpresa] = useState('');
 
   const [mostrarNotas, setMostrarNotas] = useState(false);
@@ -419,12 +422,11 @@ const Caja = () => {
 
               {/* Línea del producto ----------------------------------------- */}
               <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-                <Box
-                  component="img"
-                  src={item.thumbnail}
-                  alt={item.descripcion}
-                  sx={{ width: 120, height: 90, objectFit: 'cover', borderRadius: 1 }}
-                />
+                {imageUrl && (
+                  <Box sx={{ mb: 2 }}>
+                    <img src={imageUrl} alt="Imagen seleccionada" style={{ width: '100%', maxHeight: '300px', objectFit: 'contain' }} />
+                  </Box>
+                )}
                 <Box sx={{ flexGrow: 1 }}>
                   <Typography variant="body2">{item.descripcion}</Typography>
                 </Box>
