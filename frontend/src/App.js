@@ -1,45 +1,32 @@
 import { useEffect, useState } from "react";
-//import { createClient } from '@supabase/supabase-js'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
-import Account from './Account';
 
+import Account from './Account';
 import './App.css';
 import SquareGrid from './SquareGrid';
 import ButtonAppBar from './NavBar';
 import Footer from './Footer';
 import ImageEditor from "./EditorPage"; 
-
 import InicioSesion from "./InicioSesion";
 import Registrarse from "./Registrarse";
 import LayoutConNavbar from './LayoutConNavbar';
 
-
-import supabase from "./supabase-client"; // Permite un singleton con la conexión a la base de datos
-
-import {fetchResources, insertUsuarioBasico, updateUsuarioCompleto,insertCompraRecurso,fetchRecursosCompradosPorUsuario} from "./supabase-consultas";
+import supabase from "./supabase-client";
+import { fetchResources, insertUsuarioBasico, updateUsuarioCompleto, insertCompraRecurso, fetchRecursosCompradosPorUsuario } from "./supabase-consultas";
+import Caja from './Caja';
 
 function App() {
-  // Estado para recursos (con categorías)
   const [resources, setResources] = useState([]);
-
-
-  // Estado para filtro de categoría (string con código) y búsqueda
   const [filter, setFilter] = useState('Todas');
   const [inputValue, setInputValue] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [usuarioActual, setUsuarioActual] = useState({});
 
-  // Estado del usuario que actualmente inició sesión
-  const [usuarioActual,setUsuarioActual] = useState({});
-
-  // Obtener recursos con sus categorías al montar el componente
   useEffect(() => {
     fetchResources(setResources);
   }, []);
 
-  // Filtrar recursos según categoría y palabra clave
   const filteredResources = resources.filter(resource => {
-    // Filtrar por categoría (si no es 'Todas')
     if (filter !== 'Todas') {
       const categoriasIds = resource.recurso_pertenecea_categoria.map(c => c.categoria_codigo.toString());
       if (!categoriasIds.includes(filter)) {
@@ -47,9 +34,7 @@ function App() {
       }
     }
 
-    // Filtrar por palabra clave
     const palabras = resource.palabras_claves_busqueda.toLowerCase().split(';').map(p => p.trim());
-
     if (searchTerm.trim() !== '' && !palabras.some(palabra => palabra.includes(searchTerm.toLowerCase()))) {
       return false;
     }
@@ -57,14 +42,6 @@ function App() {
     return true;
   });
 
-  //updateUsuarioCompleto("aiejde@gmail.com","ioa","aowidow","netflix");
-  //insertUsuarioBasico("jeremiasjulian5003@gmail.com",1234,"argentina",false);
-  //updateUsuarioCompleto("jeremiasjulian5003@gmail.com","Jere","Julian","google 2");
-
-  //insertCompraRecurso("jeremiasjulian5003@gmail.com",1111222233334444,3);
-  //fetchRecursosCompradosPorUsuario(null,"jeremiasjulian5003@gmail.com");
-
-  // Manejo de la búsqueda con Enter
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       setSearchTerm(inputValue);
@@ -76,7 +53,7 @@ function App() {
       <div className="App">
         <Routes>
           {/* Rutas con Navbar y Footer */}
-          <Route element={<LayoutConNavbar usuarioActual={usuarioActual}/>}>
+          <Route element={<LayoutConNavbar usuarioActual={usuarioActual} />}>
             <Route path="/" element={
               <div style={{ display: "flex", flexDirection: 'column', flexGrow: "1", width: "100%" }}>
                 <div style={{ padding: '15px', backgroundColor: '#fff', display: 'flex', alignItems: 'center', gap: '10px', maxWidth: '2000px' }}>
@@ -121,13 +98,11 @@ function App() {
           {/* Rutas sin Navbar ni Footer */}
           <Route path="/iniciosesion" element={<InicioSesion setUsuarioActual={setUsuarioActual} />} />
           <Route path="/registro" element={<Registrarse />} />
-
+          <Route path="/caja" element={<Caja />} />
         </Routes>
-
-        
       </div>
     </Router>
   );
 }
-  
+
 export default App;

@@ -125,7 +125,7 @@ const LoginForm = ({setUsuarioActual}) => {
                 fullWidth
                 margin="normal"
                 label="Contraseña"
-                type={showPassword ? 'text' : 'password'}  // Cambia tipo según showPassword
+                type={showPassword ? 'text' : 'password'} 
                 sx={{ fontFamily: 'Poppins, sans-serif' }}
                 onChange={(e) => setPassword(e.target.value)}
                 InputProps={{
