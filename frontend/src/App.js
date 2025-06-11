@@ -7,6 +7,8 @@ import SquareGrid from './SquareGrid';
 import ButtonAppBar from './NavBar';
 import Footer from './Footer';
 import ImageEditor from "./EditorPage"; 
+import Precios from "./precios";
+
 import InicioSesion from "./InicioSesion";
 import Registrarse from "./Registrarse";
 import LayoutConNavbar from './LayoutConNavbar';
@@ -122,6 +124,7 @@ function App() {
 
             <Route path="/editor/:id" element={<ImageEditor imageList={filteredResources} />} />
             <Route path="/cuenta" element={<Account usuario={usuarioActual} />} />
+            <Route path="/precios" element={<Precios />} />
           </Route>
 
           {/* Rutas sin Navbar ni Footer */}

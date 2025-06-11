@@ -24,15 +24,13 @@ export default function ButtonAppBar({usuarioActual}) {
       case "Ver Perfil":
         navigate('/cuenta');
         break;
+      case "Precios":
+        navigate('/precios');
+        break;
       default:
         console.log(`Navegando a ${item} (aún no implementado)`);
         break;
     }
-    /*if (item === "Iniciar Sesion") {
-      navigate('/iniciosesion');
-    } else {
-      console.log(`Navegando a ${item} (aún no implementado)`);
-    }*/
   };
 
   // División de ítems
