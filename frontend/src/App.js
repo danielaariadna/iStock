@@ -15,6 +15,12 @@ import supabase from "./supabase-client";
 import { fetchResources, insertUsuarioBasico, updateUsuarioCompleto, insertCompraRecurso, fetchRecursosCompradosPorUsuario } from "./supabase-consultas";
 import Caja from './Caja';
 
+import supabase from "./supabase-client"; // Permite un singleton con la conexión a la base de datos
+
+//import {insertCompraRecursoUsandoSubscripcion,insertCompraSubscripcion,updateUsuarioSoloSubscripcion,insertCompraRecursoUsandoCreditos,updateUsuarioSoloCreditos,insertCompraCreditos,fetchPaqueteCreditosByID,purchaseHash,fetchResources, insertUsuarioBasico, updateUsuarioCompleto,insertCompraRecurso,fetchRecursosCompradosPorUsuario} from "./supabase-consultas";
+//import {} from "./business-logic"
+import {fetchResources} from "./supabase-consultas";
+
 function App() {
   const [resources, setResources] = useState([]);
   const [filter, setFilter] = useState('Todas');
@@ -42,6 +48,29 @@ function App() {
     return true;
   });
 
+  //updateUsuarioCompleto("aiejde@gmail.com","ioa","aowidow","netflix");
+  //insertUsuarioBasico("jeremiasjulian5003@gmail.com",1234,"argentina",false);
+  //updateUsuarioCompleto("jeremiasjulian5003@gmail.com","Jere","Julian","google 2");
+
+  //insertCompraRecurso("jeremiasjulian5003@gmail.com",1111222233334444,3);
+  //fetchRecursosCompradosPorUsuario(null,"jeremiasjulian5003@gmail.com");
+
+  //console.log(purchaseHash("jeremiasjulian5003@gmail.com"));
+
+  //updateUsuarioSoloCreditos("jeremiasjulian5003@gmail.com",300);
+  
+  //fetchPaqueteCreditosByID(null,300);
+
+  //insertCompraCreditos("jeremiasjulian5003@gmail.com",1111222233334444,300);
+  //insertCompraRecursoUsandoCreditos("jeremiasjulian5003@gmail.com",3);
+  //insertCompraRecursoUsandoCreditos("test@gmail.com",3);
+  //updateUsuarioSoloSubscripcion("jeremiasjulian5003@gmail.com",2,120,4);
+
+  //insertCompraSubscripcion("jeremiasjulian5003@gmail.com",1111222233334444,2);
+
+  //insertCompraRecursoUsandoSubscripcion("test@gmail.com",4);
+
+  // Manejo de la búsqueda con Enter
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       setSearchTerm(inputValue);
