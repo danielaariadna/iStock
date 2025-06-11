@@ -17,11 +17,11 @@ import supabase from "./supabase-client";
 import { fetchResources, insertUsuarioBasico, updateUsuarioCompleto, insertCompraRecurso, fetchRecursosCompradosPorUsuario } from "./supabase-consultas";
 import Caja from './Caja';
 
-import supabase from "./supabase-client"; // Permite un singleton con la conexión a la base de datos
+//import supabase from "./supabase-client"; // Permite un singleton con la conexión a la base de datos
 
 //import {insertCompraRecursoUsandoSubscripcion,insertCompraSubscripcion,updateUsuarioSoloSubscripcion,insertCompraRecursoUsandoCreditos,updateUsuarioSoloCreditos,insertCompraCreditos,fetchPaqueteCreditosByID,purchaseHash,fetchResources, insertUsuarioBasico, updateUsuarioCompleto,insertCompraRecurso,fetchRecursosCompradosPorUsuario} from "./supabase-consultas";
 //import {} from "./business-logic"
-import {fetchResources} from "./supabase-consultas";
+//import {fetchResources} from "./supabase-consultas";
 
 function App() {
   const [resources, setResources] = useState([]);
