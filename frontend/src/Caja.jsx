@@ -35,7 +35,7 @@ import naranjaLogo from './buttons/naranja.png';
 import { useLocation } from 'react-router-dom'; 
 
 
-const Caja = () => {
+const Caja = ({usuarioActual,tipoCompra,medioDePago}) => {
   const [tipoDoc, setTipoDoc] = useState('DNI');
   const [pais, setPais] = useState('');
   const [provincia, setProvincia] = useState('Buenos Aires');

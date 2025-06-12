@@ -31,7 +31,7 @@ const itemStyle = {
   marginBottom: '10px'
 };
 
-export default function ImageEditor({ imageList }) {
+export default function ImageEditor({ imageList,usuarioActual }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState('gratis');
@@ -302,9 +302,10 @@ export default function ImageEditor({ imageList }) {
       fontWeight: 'bold'
     }}
     onClick={async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      //const { data: { user } } = await supabase.auth.getUser();
 
-      if (!user) {
+      // Comprobar si se inició sesion
+      if (Object.keys(usuarioActual).length === 0) {
         navigate('/iniciosesion');
       } else {
         navigate(`/caja/${imageObj.id}`, {
@@ -327,7 +328,9 @@ export default function ImageEditor({ imageList }) {
               width: '100%',
               fontWeight: 'bold'
             }}
-          >
+          onClick={() =>{
+            navigate('/precios');
+          }}>
             Ver planes y precio
           </button>
           {/*Información del archivo*/}

@@ -122,7 +122,7 @@ function App() {
               </div>
             } />
 
-            <Route path="/editor/:id" element={<ImageEditor imageList={filteredResources} />} />
+            <Route path="/editor/:id" element={<ImageEditor imageList={filteredResources} usuarioActual={usuarioActual}/>} />
             <Route path="/cuenta" element={<Account usuario={usuarioActual} />} />
             <Route path="/precios" element={<Precios />} />
           </Route>
@@ -130,7 +130,9 @@ function App() {
           {/* Rutas sin Navbar ni Footer */}
           <Route path="/iniciosesion" element={<InicioSesion setUsuarioActual={setUsuarioActual} />} />
           <Route path="/registro" element={<Registrarse />} />
-          <Route path="/caja/:id" element={<Caja />} />
+          {/* Tipo de compra: 0 para recurso; 1 para creditos; 2 para subscripcion.*/}
+          {/* Medio de Pago: 0 para tarjeta de credito; 1 para usar creditos; 2 para usar subscripcion.*/}
+          <Route path="/caja/:id" element={<Caja usuarioActual={usuarioActual} tipoCompra={0} medioDePago={0}/>} />
         </Routes>
       </div>
     </Router>
