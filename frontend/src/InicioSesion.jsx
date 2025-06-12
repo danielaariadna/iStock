@@ -17,7 +17,8 @@ import PersonIcon from '@mui/icons-material/Person';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import iStockLogo from "./buttons/istockLogo.png";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+
 
 const LoginForm = ({setUsuarioActual}) => {
   const navigate = useNavigate();
@@ -29,6 +30,9 @@ const LoginForm = ({setUsuarioActual}) => {
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
   const [usuarioSinAutorizacion,setUsuarioSinAutorizacion] = useState({});
+  const location = useLocation();
+  const from = location.state?.from || '/'; // Redirige a '/' si no hay una página previa
+
   
 
   const handleClickShowPassword = () => {
@@ -49,7 +53,7 @@ const LoginForm = ({setUsuarioActual}) => {
     setUsuarioActual(usuarioSinAutorizacion); // Necesario para guardar el estado del usuario que actualmente inició sesión
     setUsuarioSinAutorizacion({});
     console.log("Sesión Validada");
-    navigate('/cuenta');
+    navigate(from);
   }
 
   return (
