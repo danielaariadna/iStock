@@ -80,7 +80,7 @@ export default function ButtonAppBar({usuarioActual}) {
                 </Button>
               ))}
               <Button
-                onClick={() => handleNavItemClick("Iniciar Sesion")}
+                onClick={() => handleNavItemClick(Object.keys(usuarioActual).length === 0 ? "Iniciar Sesion" : "Ver Perfil")}
                 variant="contained"
                 sx={{
                   backgroundColor: "#20ad87",
@@ -91,7 +91,7 @@ export default function ButtonAppBar({usuarioActual}) {
                   }
                 }}
               >
-                Iniciar sesión
+                {Object.keys(usuarioActual).length === 0 ? "Iniciar Sesion" : "Ver Perfil"}
               </Button>
             </Box>
           )}
