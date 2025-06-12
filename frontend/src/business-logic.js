@@ -1,4 +1,4 @@
-import {insertCompraCreditos,insertCompraRecurso,insertCompraRecursoUsandoCreditos,insertCompraSubscripcion} from "./supabase-consultas";
+import {insertCompraCreditos,insertCompraRecurso,insertCompraRecursoUsandoCreditos,insertCompraSubscripcion,insertCompraRecursoUsandoSubscripcion} from "./supabase-consultas";
 
 
 
@@ -14,7 +14,7 @@ export const comprarRecursoConCreditos = async (_idRecurso,_emailUsuario) => {
 
 // Comprar recurso usando subscripción (se restan de la cantidad mensual contratada)
 export const comprarRecursoConSubscripcion = async (setState,_idRecurso,_emailUsuario) => {
-
+    insertCompraRecursoUsandoSubscripcion(_emailUsuario,_idRecurso);
 };
 
 // Comprar creditos usando una tarjeta de credito y dinero real

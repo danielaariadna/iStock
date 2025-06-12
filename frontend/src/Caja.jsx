@@ -33,7 +33,7 @@ import cabalLogo from './buttons/cabal.png';
 import naranjaLogo from './buttons/naranja.png';
 
 import { useLocation } from 'react-router-dom'; 
-
+import {comprarRecursoConDinero,comprarRecursoConCreditos,comprarCreditosConDinero,comprarSubscripcionConDinero,comprarRecursoConSubscripcion} from './business-logic'
 
 const Caja = ({usuarioActual,tipoCompra,medioDePago}) => {
   const [tipoDoc, setTipoDoc] = useState('DNI');
@@ -61,6 +61,44 @@ const Caja = ({usuarioActual,tipoCompra,medioDePago}) => {
     setEmpresa('');
     setIva('');
   };
+
+  // Gestionar la compra de un recurso
+  const handleCompra = (_usuarioEmail,_nroTarjetaCredito,_tipoCompra,_medioPago,_recurso) => {
+    console.log("handle test");
+    switch(_medioPago){
+      // Compra recursos, creditos o subscripciones con tarjeta de credito
+      case 0:
+        switch(_tipoCompra){
+          // Recurso
+          case 0:
+            comprarRecursoConDinero(_recurso,_usuarioEmail,_nroTarjetaCredito);
+            break;
+          // Creditos
+          case 1:
+            comprarCreditosConDinero(_recurso,_usuarioEmail,_nroTarjetaCredito);
+            break;
+          // Subscripcion
+          case 2:
+            comprarSubscripcionConDinero(_recurso,_usuarioEmail,_nroTarjetaCredito);
+            break;
+          // Invalido
+          default:
+            break;
+        }
+        break;
+      // Compra recursos con creditos
+      case 1:
+        comprarRecursoConCreditos(_recurso,_usuarioEmail);
+        break;
+      // Compra recursos con subscripcion
+      case 2:
+        comprarRecursoConSubscripcion(_recurso,_usuarioEmail);
+        break;
+      // no comprar
+      default:
+        break;
+    }
+  }
 
   const ResumenPedido = () => {
       const { state } = useLocation();
@@ -389,7 +427,9 @@ const Caja = ({usuarioActual,tipoCompra,medioDePago}) => {
                 Al hacer clic en "Estoy de acuerdo - Comprar y descargar", usted reconoce que ha leído y acepta los términos y condiciones del Acuerdo de licencia de contenido y acepta nuestro Acuerdo de membresía, Política de privacidad y Términos de uso.
               </Typography>
 
-              <Button variant="contained" color="error" fullWidth sx={{ mt: 3}}>
+              <Button variant="contained" color="error" fullWidth sx={{ mt: 3}} onClick={async () => {
+                await handleCompra(usuarioActual.email,1234,0,0,4);
+              }}>
                 Estoy de acuerdo - Comprar y descargar
               </Button>
             </Box>
