@@ -276,7 +276,7 @@ const creditData = [
       { credits: 300, price: 1378100, savings: 361900 },
     ],
   ];
-  const PricingComponent = ({ isLoggedIn }) => {
+  const PricingComponent = ({ usuarioActual}) => {
   const [activeTab, setActiveTab] = useState('subscriptions');
   const [annualPlan, setAnnualPlan] = useState(true);
   const [page, setPage] = useState(0);
@@ -477,19 +477,38 @@ const creditData = [
       </div>
 
       <button
-            style={styles.buyBtn}
-            onClick={() => {
-              if (isLoggedIn) {
-                console.log(`Comprando ${creditData[page][selected]?.credits} créditos`);
-                navigate('/iniciosesion'); //Pagina de Bruno
-              } else {
-                console.log('Usuario no logueado, redirigiendo a login...');
-                navigate('/iniciosesion'); // Redirige a login si no está autenticado
-              }
-            }}
-          >
-            Comprar {creditData[page][selected]?.credits} créditos
-          </button>
+  style={styles.buyBtn}
+  onClick={async () => {
+    if (Object.keys(usuarioActual).length === 0) {
+      navigate('/iniciosesion');
+    } else {
+      if (activeTab === 'subscriptions') {
+        navigate('/caja', {
+          state: {
+            tipo: 'suscripcion',
+            plan: annualPlan ? 'anual' : 'mensual',
+            precio: 17200 // ajustá si usás otro precio
+          }
+        });
+      } else {
+        const seleccionado = creditData[page][selected];
+        if (seleccionado) {
+          navigate('/caja/${creditData[page][selected]?.credits}', {
+            state: {
+              tipo: 'creditos',
+              cantidad: seleccionado.credits,
+              precio: seleccionado.price
+            }
+          });
+        } else {
+          alert('Por favor seleccioná un paquete de créditos.');
+        }
+      }
+    }
+  }}
+>
+  Comprar {activeTab === 'subscriptions' ? 'suscripción' : `${creditData[page][selected]?.credits} créditos`}
+</button>
     </div>
         
       )}

@@ -8,7 +8,7 @@ import ButtonAppBar from './NavBar';
 import Footer from './Footer';
 import ImageEditor from "./EditorPage"; 
 import Precios from "./precios";
-
+import PricingComponent from "./precios";
 import InicioSesion from "./InicioSesion";
 import Registrarse from "./Registrarse";
 import LayoutConNavbar from './LayoutConNavbar';
@@ -124,7 +124,7 @@ function App() {
 
             <Route path="/editor/:id" element={<ImageEditor imageList={filteredResources} usuarioActual={usuarioActual}/>} />
             <Route path="/cuenta" element={<Account usuario={usuarioActual} />} />
-            <Route path="/precios" element={<Precios />} />
+            <Route path="/precios" element={<PricingComponent usuarioActual={usuarioActual} />} />
           </Route>
 
           {/* Rutas sin Navbar ni Footer */}

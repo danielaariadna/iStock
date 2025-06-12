@@ -46,6 +46,7 @@ const Caja = ({usuarioActual,tipoCompra,medioDePago}) => {
 
   const location = useLocation();
   const imageUrl = location.state?.imageUrl;
+  const { cantidad } = location.state || {};
 
   const [empresa, setEmpresa] = useState('');
 
@@ -108,6 +109,9 @@ const Caja = ({usuarioActual,tipoCompra,medioDePago}) => {
         precio: 5800,
         iva: 1218,
       };
+      const isCredito = state.tipo === 'creditos';
+      const cantidadCreditos = state.cantidad; // Te llega desde navigate
+      const precioCreditos = state.precio; // Te llega desde navigate
 
       const currency = useMemo(
         () =>
@@ -119,7 +123,7 @@ const Caja = ({usuarioActual,tipoCompra,medioDePago}) => {
         []
       );
 
-      const subtotal = item.precio;
+      const subtotal = isCredito ? precioCreditos : item.precio;
       const total = subtotal + item.iva;  
       const [mostrarCodigoPromo, setMostrarCodigoPromo] = useState(false);
       const [codigoPromo, setCodigoPromo] = useState('');
@@ -462,20 +466,32 @@ const Caja = ({usuarioActual,tipoCompra,medioDePago}) => {
 
               {/* Línea del producto ----------------------------------------- */}
               <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-                {imageUrl && (
-                  <Box sx={{ mb: 2 }}>
-                    <img src={imageUrl} alt="Imagen seleccionada" style={{ width: '100%', maxHeight: '300px', objectFit: 'contain' }} />
-                  </Box>
-                )}
-                <Box sx={{ flexGrow: 1 }}>
-                  <Typography variant="body2">{item.descripcion}</Typography>
-                </Box>
-                <Typography variant="body2" fontWeight={500}>
-                  {currency.format(item.precio)}
-                </Typography>
-              </Box>
+  {/* Si es compra de recurso (imagen) */}
+  {!isCredito && imageUrl && (
+    <Box sx={{ mb: 2 }}>
+      <img 
+        src={imageUrl} 
+        alt="Imagen seleccionada" 
+        style={{ width: '100%', maxHeight: '300px', objectFit: 'contain' }} 
+      />
+    </Box>
+  )}
 
-              <Divider sx={{ my: 2 }} />
+  <Box sx={{ flexGrow: 1 }}>
+    <Typography variant="body2">
+      {isCredito 
+        ? `Compra de ${cantidadCreditos} crédito${cantidadCreditos > 1 ? 's' : ''}` 
+        : item.descripcion}
+    </Typography>
+  </Box>
+
+  <Typography variant="body2" fontWeight={500}>
+    {currency.format(isCredito ? precioCreditos : item.precio)}
+  </Typography>
+</Box>
+
+<Divider sx={{ my: 2 }} />
+
 
               {/* Sub-total & IVA -------------------------------------------- */}
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
