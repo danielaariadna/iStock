@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState,useEffect } from 'react';
 import './Overview.css'; // Archivo CSS externo
+import { fetchRecursosCompradosPorUsuario } from './../supabase-consultas';
 
-const Overview = () => {
+
+const Overview = ({usuario}) => {
   // Simulación de datos del usuario
   const user = {
     hasSubscription: false,
@@ -9,10 +11,16 @@ const Overview = () => {
     downloads: [],
   };
 
+  const [listaCompras,setListaCompras] = useState([]);
+  useEffect(() => {
+    fetchRecursosCompradosPorUsuario(setListaCompras,usuario.email);
+    console.log(listaCompras);
+  }, []);
+
   return (
     <div className="overview-container">
       {/* Título */}
-      <h1 className="overview-title">Your Account</h1>
+      <h1 className="overview-title">Your Account<p>Creditos disponibles: {usuario.creditos_disponibles}</p></h1>
 
       {/* Estado de la cuenta */}
       <div className="overview-box">
@@ -28,7 +36,7 @@ const Overview = () => {
           </p>
         )}
       </div>
-      <h1 className="overview-title">Your Invoices</h1>
+      <h1 className="overview-title">Your Invoices <p>{[...listaCompras].join(',')}</p></h1>
       {/* Invoices */}
       <div className="overview-box">
         {user.invoices.length === 0 ? (

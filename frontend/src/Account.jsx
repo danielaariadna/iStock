@@ -1,18 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Box, AppBar, Toolbar, Button } from '@mui/material';
 
 import Overview from './AccountComponents/Overview';
 import Profile from './AccountComponents/Profile';
 import Invoices from './AccountComponents/Invoices';
 import DownloadHistory from './AccountComponents/DownloadHistory';
+import { fetchUsuarioByID } from './supabase-consultas';
 
 export default function ButtonAppBar({ usuario }) {
   const [activeTab, setActiveTab] = useState('overview');
 
-const renderContent = () => {
+  const [usuarioLogueado,setUsuarioLogueado] = useState({});
+  useEffect(() => {
+    fetchUsuarioByID(setUsuarioLogueado,usuario.email);
+  }, [usuario]);
+
+
+  const renderContent = () => {
   switch (activeTab) {
     case 'overview':
-      return <Overview usuario={usuario} />;
+      return <Overview usuario={usuarioLogueado} />;
     case 'profile':
       return <Profile usuario={usuario} />;
     case 'invoices':

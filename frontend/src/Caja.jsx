@@ -32,7 +32,7 @@ import mastercardLogo from './buttons/mastercard.png';
 import cabalLogo from './buttons/cabal.png';
 import naranjaLogo from './buttons/naranja.png';
 
-import { useLocation } from 'react-router-dom'; 
+import { useLocation,useNavigate,useParams } from 'react-router-dom'; 
 import {comprarRecursoConDinero,comprarRecursoConCreditos,comprarCreditosConDinero,comprarSubscripcionConDinero,comprarRecursoConSubscripcion} from './business-logic'
 
 const Caja = ({usuarioActual,tipoCompra,medioDePago}) => {
@@ -54,6 +54,14 @@ const Caja = ({usuarioActual,tipoCompra,medioDePago}) => {
   const [nota1, setNota1] = useState('');
   const [nota2, setNota2] = useState('');
   const [nota3, setNota3] = useState('');
+
+  var nroTarjetaCredito = "";
+
+  // variables de id de imagen
+  const { id } = useParams();
+  const imageId = parseInt(id, 10);
+
+  const navigate = useNavigate();
 
   const handleTipoDocChange = (e) => {
     const value = e.target.value;
@@ -100,6 +108,12 @@ const Caja = ({usuarioActual,tipoCompra,medioDePago}) => {
         break;
     }
   }
+
+  // Comprobar si se están comprando creditos
+  const { state } = useLocation();
+  const isCredito = state.tipo === 'creditos';
+  const cantidadCreditos = state.cantidad;
+  console.log("comprando creditos?",isCredito,cantidadCreditos);
 
   const ResumenPedido = () => {
       const { state } = useLocation();
@@ -359,6 +373,7 @@ const Caja = ({usuarioActual,tipoCompra,medioDePago}) => {
                     </InputAdornment>
                   }
                   sx={{ backgroundColor: '#fff', mb: 2 }}
+                  onChange={(e) => nroTarjetaCredito = e.target.value}
                 />
 
                 <Grid container spacing={2}>
@@ -432,7 +447,11 @@ const Caja = ({usuarioActual,tipoCompra,medioDePago}) => {
               </Typography>
 
               <Button variant="contained" color="error" fullWidth sx={{ mt: 3}} onClick={async () => {
-                await handleCompra(usuarioActual.email,1234,0,0,4);
+                const tipoCompraElegida = isCredito ? 1 : tipoCompra; // Elegir si comprar recurso u otro
+                const recursoElegido = isCredito ? cantidadCreditos : imageId;
+                console.log(tipoCompraElegida,medioDePago,recursoElegido);
+                await handleCompra(usuarioActual.email,nroTarjetaCredito,tipoCompraElegida,medioDePago,recursoElegido);
+                navigate("/");
               }}>
                 Estoy de acuerdo - Comprar y descargar
               </Button>

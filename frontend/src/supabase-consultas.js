@@ -227,6 +227,7 @@ export const fetchRecursosCompradosPorUsuario = async (setState,_user_email) => 
       // armar lista con id de recursos
       var listaRecursosComprados = new Set();
       
+      
       data.forEach(function(e){
         listaRecursosComprados.add(e.recurso_id_comprado)
       });
@@ -263,6 +264,8 @@ export const insertCompraCreditos = async (_user_email,_nroTarjeta_usada,_cantid
     }
     await fetchPaqueteCreditosByID(setResource,_cantidadCreditos);
     console.log("Fetched resource obj: ",paqueteCreditosObj);
+    if (paqueteCreditosObj == null) return 0;
+
 
     // Construye el objeto compra que se almacenará en la base de datos
     const date = new Date();
