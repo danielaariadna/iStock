@@ -276,11 +276,26 @@ const creditData = [
       { credits: 300, price: 1378100, savings: 361900 },
     ],
   ];
+  const subscriptionData = {
+    anual: {
+      10: { precio: 17200, precioPorDescarga: 1720 },
+      25: { precio: 29400, precioPorDescarga: 1776 },
+      50: { precio: 48800, precioPorDescarga: 976 },
+      750: { precio: 81600, precioPorDescarga: 108 }, // ejemplo
+    },
+    mensual: {
+      10: { precio: 29100, precioPorDescarga: 2910 },
+      25: { precio: 41100, precioPorDescarga: 1644 },
+      50: { precio: 67300, precioPorDescarga: 1346 },
+      750: { precio: 117200, precioPorDescarga: 156 }, // ejemplo
+    }
+  };
   const PricingComponent = ({ usuarioActual}) => {
   const [activeTab, setActiveTab] = useState('subscriptions');
   const [annualPlan, setAnnualPlan] = useState(true);
   const [page, setPage] = useState(0);
   const [selected, setSelected] = useState(2);
+  const [selectedDownloads, setSelectedDownloads] = useState(10);
   const navigate = useNavigate();
   const handleSelect = (index) => {
     setSelected(index);
@@ -358,10 +373,21 @@ const creditData = [
       {activeTab === 'subscriptions' ? (
         <div style={styles.subscriptionCard}>
           <div style={styles.toggleContainer}>
-            <span>Plan anual</span>
+            <span style={{ fontSize: '18px' }}>Plan anual</span>
             <ToggleSwitch checked={annualPlan} onChange={() => setAnnualPlan(!annualPlan)} />
-            <span>Mes a mes</span>
+            <span style={{ fontSize: '18px' }}>Mes a mes</span>
           </div>
+
+         {(() => {
+      const currentPlan = annualPlan
+      ? subscriptionData.anual[selectedDownloads]
+      : subscriptionData.mensual[selectedDownloads];
+      if (!currentPlan || !currentPlan.precio || !currentPlan.precioPorDescarga) {
+        return <p>Cargando precios...</p>;
+      }
+    
+      return (
+        <>
           <h2 style={styles.subscriptionTitle}>Premium</h2>
           <p style={styles.subscriptionDesc}>
             Todas las imágenes, incluidas las imágenes Signature auténticas y de alta calidad que solo puedes encontrar en iStock
@@ -369,17 +395,118 @@ const creditData = [
           <button style={styles.downloadButton}>
             Todas las imágenes son una descarga
           </button>
+          <p style={styles.smallTextGray}>Descargas por mes</p>
+
           <div style={styles.creditsContainer}>
-            {[10, 25, 50, 750].map(num => (
-              <button key={num} style={styles.creditButton}>{num}</button>
-            ))}
-          </div>
-          <p style={styles.smallTextGray}>Transferencia de descargas no utilizadas</p>
+          {[10, 25, 50, 750].map(num => (
+          <button
+          key={num}
+          style={{
+            ...styles.creditButton,
+            backgroundColor: selectedDownloads === num ? '#319795' : '#fff', // resaltar seleccionado
+            color: selectedDownloads === num ? '#fff' : '#000',
+            border:'2px solid #319795' ,
+                    }}
+          onClick={() => setSelectedDownloads(num)}
+        >
+          {num}
+        </button>
+  ))}
+</div>
+<p style={styles.smallTextGray}>
+  Transferencia de descargas no utilizadas
+  <span style={{ position: 'relative', display: 'inline-block', marginLeft: '8px' }}>
+    <span
+      style={{
+        backgroundColor: '#319795',
+        color: 'white',
+        borderRadius: '50%',
+        width: '18px',
+        height: '18px',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '12px',
+        cursor: 'help',
+        fontWeight: 'bold',
+        position: 'relative',
+      }}
+      onMouseEnter={(e) => {
+        const tooltip = e.currentTarget.nextSibling;
+        tooltip.style.visibility = 'visible';
+        tooltip.style.opacity = '1';
+      }}
+      onMouseLeave={(e) => {
+        const tooltip = e.currentTarget.nextSibling;
+        tooltip.style.visibility = 'hidden';
+        tooltip.style.opacity = '0';
+      }}
+    >
+      ?
+    </span>
+    <span
+      style={{
+        visibility: 'hidden',
+        width: '240px',
+        backgroundColor: 'black',
+        color: '#fff',
+        textAlign: 'center',
+        borderRadius: '6px',
+        padding: '8px',
+        position: 'absolute',
+        zIndex: 1,
+        bottom: '125%',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        opacity: 0,
+        transition: 'opacity 0.3s ease',
+        fontSize: '12px',
+        lineHeight: '1.4',
+      }}
+    >
+      Transfiere hasta 250 descargas sin utilizar mes a mes. Si la renovación automática se encuentra desactivada, al finalizar tu suscripción perderás todas las descargas no utilizadas.
+    </span>
+  </span>
+</p>
+
+
+            <>
           <div>
-            <span style={styles.priceLarge}>AR$ 17.200 </span>
-            <span style={styles.priceSmall}>por mes</span>
+
+            <span style={styles.priceLarge}>
+              AR$ {currentPlan.precio.toLocaleString()} 
+            </span>
+            <span style={styles.priceSmall}> por mes</span>
           </div>
-          <p style={styles.pricePerDownload}>AR$ 1.720,00 / descarga</p>
+          <p style={styles.pricePerDownload}>
+            AR$ {currentPlan.precioPorDescarga.toLocaleString()} / descarga
+          </p>
+          <button
+  style={styles.buyBtn}
+  onClick={async () => {
+    if (Object.keys(usuarioActual).length === 0) {
+      navigate('/iniciosesion');
+    } else {
+      if (activeTab === 'subscriptions') {
+        navigate('/caja', {
+          state: {
+            tipo: 'suscripcion',
+            plan: annualPlan ? 'anual' : 'mensual',
+            precio: 17200 // ajustá si usás otro precio
+          }
+        });
+      } 
+    }
+  }}
+>
+  Suscribirse
+</button>
+  </>
+
+        </>
+      );
+    })()}
+          
         </div>
       ) : (
         
@@ -482,15 +609,7 @@ const creditData = [
     if (Object.keys(usuarioActual).length === 0) {
       navigate('/iniciosesion');
     } else {
-      if (activeTab === 'subscriptions') {
-        navigate('/caja', {
-          state: {
-            tipo: 'suscripcion',
-            plan: annualPlan ? 'anual' : 'mensual',
-            precio: 17200 // ajustá si usás otro precio
-          }
-        });
-      } else {
+      
         const seleccionado = creditData[page][selected];
         if (seleccionado) {
           navigate('/caja/${creditData[page][selected]?.credits}', {
@@ -503,7 +622,7 @@ const creditData = [
         } else {
           alert('Por favor seleccioná un paquete de créditos.');
         }
-      }
+      
     }
   }}
 >

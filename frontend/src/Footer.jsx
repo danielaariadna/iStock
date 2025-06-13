@@ -6,7 +6,8 @@ export default function Footer() {
   const footerLinkStyle = {
     color: '#fff',
     textDecoration: 'none',
-    fontSize: '14px'
+    fontSize: '14px',
+    zindex: 10,
   };
 
   const sectionStyle = {
