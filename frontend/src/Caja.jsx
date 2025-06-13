@@ -34,6 +34,7 @@ import naranjaLogo from './buttons/naranja.png';
 
 import { useLocation,useNavigate,useParams } from 'react-router-dom'; 
 import {comprarRecursoConDinero,comprarRecursoConCreditos,comprarCreditosConDinero,comprarSubscripcionConDinero,comprarRecursoConSubscripcion} from './business-logic'
+import { fetchResourceByID } from './supabase-consultas';
 
 const Caja = ({usuarioActual,tipoCompra,medioDePago}) => {
   const [tipoDoc, setTipoDoc] = useState('DNI');
@@ -113,7 +114,11 @@ const Caja = ({usuarioActual,tipoCompra,medioDePago}) => {
   const { state } = useLocation();
   const isCredito = state.tipo === 'creditos';
   const cantidadCreditos = state.cantidad;
+  const isSubscripcion = state.tipo === 'suscripcion';
+  const plan = state.plan;
   console.log("comprando creditos?",isCredito,cantidadCreditos);
+  console.log("comprando subscripcion?",isSubscripcion,plan);
+  
 
   const ResumenPedido = () => {
       const { state } = useLocation();
@@ -451,6 +456,33 @@ const Caja = ({usuarioActual,tipoCompra,medioDePago}) => {
                 const recursoElegido = isCredito ? cantidadCreditos : imageId;
                 console.log(tipoCompraElegida,medioDePago,recursoElegido);
                 await handleCompra(usuarioActual.email,nroTarjetaCredito,tipoCompraElegida,medioDePago,recursoElegido);
+                var resourceURL = {};
+                function setResourceUrl(_url){
+                  resourceURL = _url;
+                }
+                await fetchResourceByID(setResourceUrl,imageId);
+                console.log("url: ",resourceURL.ruta_archivo);
+                if (!isCredito && !isSubscripcion){
+                  // Descargar archivo
+                  fetch(resourceURL.ruta_archivo)
+                  // check to make sure you didn't have an unexpected failure (may need to check other things here depending on use case / backend)
+                  .then(resp => resp.status === 200 ? resp.blob() : Promise.reject('something went wrong'))
+                  .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    // the filename you want
+                    a.download = imageId+'.jpg';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    // or you know, something with better UX...
+                    alert('archivo descargado!'); 
+                  })
+                  .catch(() => alert('fallo al descargar!'));
+                }
+
                 navigate("/");
               }}>
                 Estoy de acuerdo - Comprar y descargar

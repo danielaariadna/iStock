@@ -185,6 +185,8 @@ export const insertCompraRecurso = async (_user_email,_nroTarjeta_usada,_resourc
     }
     await fetchResourceByID(setResource,_resource_id);
     console.log("Fetched resource obj: ",resourceObj);
+    if (resourceObj == null) return 0;
+
 
     // Construye el objeto compra que se almacenará en la base de datos
     const date = new Date();

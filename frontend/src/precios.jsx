@@ -488,7 +488,7 @@ const creditData = [
       navigate('/iniciosesion');
     } else {
       if (activeTab === 'subscriptions') {
-        navigate('/caja', {
+        navigate('/caja/${1}', {
           state: {
             tipo: 'suscripcion',
             plan: annualPlan ? 'anual' : 'mensual',
