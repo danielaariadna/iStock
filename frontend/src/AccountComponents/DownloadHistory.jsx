@@ -6,7 +6,7 @@ const DownloadHistory = () => {
       backgroundColor: '#f8f8f8',
       padding: '40px',
       fontFamily: 'Arial, sans-serif',
-      minHeight: '100vh',
+      minHeight: '81vh',
     },
     title: {
       fontSize: '20px',

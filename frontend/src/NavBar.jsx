@@ -27,6 +27,15 @@ export default function ButtonAppBar({usuarioActual}) {
       case "Precios":
         navigate('/precios');
         break;
+      case "Fotos":
+          // Si la sesión está iniciada, navega a la página de inicio (por ejemplo '/')
+          if (Object.keys(usuarioActual).length !== 0) {
+            navigate('/'); // o la ruta donde están las fotos con sesión
+          } else {
+            // si no hay sesión, puede ir a login o donde prefieras
+            navigate('/');
+          }
+          break;
       default:
         console.log(`Navegando a ${item} (aún no implementado)`);
         break;
@@ -42,7 +51,7 @@ export default function ButtonAppBar({usuarioActual}) {
       <AppBar position="static" sx={{ bgcolor: "#000" }}>
         <Toolbar>
           {/* Logo */}
-          <Box display="flex" alignItems="center" sx={{ mr: 2 }}>
+          <Box display="flex" alignItems="center" sx={{ mr: 2 }} onClick={() => {navigate( '/');}}>
             <img src={iStockLogo} alt="iStock" style={{ width: "100px", height: "auto" }} />
           </Box>
 
